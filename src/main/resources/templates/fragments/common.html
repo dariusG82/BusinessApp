@@ -13,17 +13,22 @@
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li>
           <a th:href="@{/public/home}" th:text="#{layout.menu.home}"
-             th:classappend="${#httpServletRequest.requestURI eq '/' ? 'text-light-blue' : 'text-secondary-beige'}"
+             th:classappend="${#httpServletRequest.requestURI eq '/home' ? 'text-lime' : 'text-khaki'}"
              class="nav-link-custom px-2">Home</a>
         </li>
         <li>
           <a th:href="@{/private/admin}" th:text="#{layout.menu.admin}"
-             th:classappend="${#httpServletRequest.requestURI eq '/admin' ? 'text-light-blue' : 'text-secondary-beige'}"
+             th:classappend="${#httpServletRequest.requestURI eq '/admin' ? 'text-lime' : 'text-khaki'}"
              class="nav-link-custom px-2">Admin</a>
         </li>
         <li>
           <a th:href="@{/private/accounting}" th:text="#{layout.menu.accounting}"
-             th:classappend="${#httpServletRequest.requestURI eq '/accounting' ? 'text-light-blue' : 'text-secondary-beige'}"
+             th:classappend="${#httpServletRequest.requestURI eq '/accounting' ? 'text-lime' : 'text-khaki'}"
+             class="nav-link-custom px-2">Accounting</a>
+        </li>
+        <li>
+          <a th:href="@{/private/sales}" th:text="#{layout.menu.sales}"
+             th:classappend="${#httpServletRequest.requestURI eq '/sales' ? 'text-lime' : 'text-khaki'}"
              class="nav-link-custom px-2">Accounting</a>
         </li>
       </ul>
