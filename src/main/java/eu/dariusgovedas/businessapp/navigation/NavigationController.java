@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 public class NavigationController {
 
-    @GetMapping("/home")
+    @GetMapping("/public/home")
     public String openStartPage(){
 
         return "startPage";
+    }
+
+    @GetMapping("/private/admin")
+    public String openAdminPage(){
+
+        return "adminPage";
     }
 }

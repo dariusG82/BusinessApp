@@ -12,8 +12,13 @@
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li>
-          <a th:href="@{/}" th:text="#{layout.menu.home}"
+          <a th:href="@{/public/home}" th:text="#{layout.menu.home}"
              th:classappend="${#httpServletRequest.requestURI eq '/' ? 'text-light-blue' : 'text-secondary-beige'}"
+             class="nav-link-custom px-2">Home</a>
+        </li>
+        <li>
+          <a th:href="@{/private/admin}" th:text="#{layout.menu.admin}"
+             th:classappend="${#httpServletRequest.requestURI eq '/admin' ? 'text-light-blue' : 'text-secondary-beige'}"
              class="nav-link-custom px-2">Home</a>
         </li>
       </ul>
