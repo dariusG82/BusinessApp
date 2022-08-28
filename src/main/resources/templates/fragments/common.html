@@ -19,7 +19,12 @@
         <li>
           <a th:href="@{/private/admin}" th:text="#{layout.menu.admin}"
              th:classappend="${#httpServletRequest.requestURI eq '/admin' ? 'text-light-blue' : 'text-secondary-beige'}"
-             class="nav-link-custom px-2">Home</a>
+             class="nav-link-custom px-2">Admin</a>
+        </li>
+        <li>
+          <a th:href="@{/private/accounting}" th:text="#{layout.menu.accounting}"
+             th:classappend="${#httpServletRequest.requestURI eq '/accounting' ? 'text-light-blue' : 'text-secondary-beige'}"
+             class="nav-link-custom px-2">Accounting</a>
         </li>
       </ul>
 

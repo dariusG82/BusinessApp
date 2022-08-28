@@ -19,4 +19,10 @@ public class NavigationController {
 
         return "adminPage";
     }
+
+    @GetMapping("/private/accounting")
+    public String openAccountingPage(){
+
+        return "accountingPage";
+    }
 }

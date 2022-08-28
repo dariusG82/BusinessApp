@@ -28,9 +28,14 @@ main {
     background-color: var(--khaki);
 }
 
+.custom-title-card {
+    font-size: large;
+}
+
 .custom-card {
     background-color: var(--dusty);
     color: var(--old);
+    font-size: small;
 }
 
 .text-lime {
