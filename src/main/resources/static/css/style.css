@@ -83,3 +83,7 @@ main {
     --bs-btn-active-border-color: var(--lime);
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
+
+footer {
+    padding-top: 0.4%;
+}

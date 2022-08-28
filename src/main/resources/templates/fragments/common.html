@@ -31,6 +31,11 @@
              th:classappend="${#httpServletRequest.requestURI eq '/sales' ? 'text-lime' : 'text-khaki'}"
              class="nav-link-custom px-2">Accounting</a>
         </li>
+        <li>
+          <a th:href="@{/private/warehouse}" th:text="#{layout.menu.warehouse}"
+             th:classappend="${#httpServletRequest.requestURI.endsWith('/warehouse') ? 'text-lime' : 'text-khaki'}"
+             class="nav-link-custom px-2">Accounting</a>
+        </li>
       </ul>
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">

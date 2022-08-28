@@ -31,4 +31,10 @@ public class NavigationController {
 
         return "salesmanPage";
     }
+
+    @GetMapping("/private/warehouse")
+    public String openWarehousePage(){
+
+        return "warehousePage";
+    }
 }

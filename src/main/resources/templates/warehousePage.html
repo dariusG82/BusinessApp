@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{warehousePage.title}, ~{:: #main})">
+<div id="main">
+
+    <div class="container py-4">
+
+        <div class="p-5 mb-4 background-light rounded-3">
+            <div class="container-fluid custom-title-card">
+                <h2 class="display-5 fw-bold" th:text="#{warehousePage.mainSection}">Sales section Title</h2>
+                <p class="col-md-8" th:text="#{loremIpsum25}">Content</p>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{warehousePage.create}">Create New Item</h4>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{warehousePage.showItem}">Show Current Stockr</h4>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{warehousePage.receiveOrder}">Receive Goods to WH</h4>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</html>
