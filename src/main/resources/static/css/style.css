@@ -1,0 +1,80 @@
+:root {
+    --dark: #3D0814;
+    --lime: #E7F9A9;
+    --khaki: #C6B38E;
+    --dusty: #9A9B73;
+    --old: #442F38;
+}
+
+body {
+    background-color: var(--khaki);
+}
+
+main {
+    min-height: 80vh;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.background-dark {
+    background-color: var(--old);
+}
+
+.background-light {
+    background-color: var(--lime);
+}
+
+.background-khaki {
+    background-color: var(--khaki);
+}
+
+.custom-card {
+    background-color: var(--dusty);
+    color: var(--old);
+}
+
+.text-lime {
+    color: var(--lime);
+}
+
+.text-khaki {
+    color: var(--khaki);
+}
+
+#flexRadioDefault1, #flexRadioDefault2 {
+    display: none;
+}
+
+.language-selector {
+    height: 20px;
+    width: 20px;
+}
+
+.nav-link-custom {
+    display: block;
+    color: var(--dusty);
+    text-decoration: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-link-custom {
+        transition: none;
+    }
+}
+
+.nav-link-custom:hover, .nav-link-custom:focus {
+    color: var(--lime);
+}
+
+.btn-custom {
+    --bs-btn-bg: var(--old);
+    --bs-btn-border-color: var(--lime);
+    --bs-btn-color: var(--lime);
+    --bs-btn-hover-bg: var(--khaki);
+    --bs-btn-hover-border-color: var(--dusty);
+    --bs-btn-focus-shadow-rgb: 217, 164, 6;
+    --bs-btn-active-bg: var(--dark);
+    --bs-btn-active-border-color: var(--lime);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{startPage.title}, ~{:: #main})">
+<div id="main">
+
+    <div class="container py-4">
+
+        <div class="p-5 mb-4 background-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold" th:text="#{startPage.mainSection}">Main section Title</h1>
+                <p class="col-md-8 fs-4" th:text="#{loremIpsum25}">Content</p>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h3 th:text="#{startPage.admin}">ADMIN</h3>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum50}">Content</p>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                        <img th:src="@{/img/admin_640x640.jpg}" width="100">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h3 th:text="#{startPage.salesman}">SALESMAN</h3>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum50}">Content</p>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                        <img th:src="@{/img/worker_640x640.jpg}" width="100">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h3 th:text="#{startPage.accountant}">ACCOUNTANT</h3>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum50}">Content</p>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                        <img th:src="@{/img/accounting_640x360.jpg}" width="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</html>

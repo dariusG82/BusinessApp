@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<header th:fragment="header"
+        class="background-dark">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a th:href="@{/}" class="d-flex align-items-center mb-2 mb-lg-0 text-lime text-decoration-none">
+        <img th:src="@{/img/logo.png}" height="50" width="70" alt="Logotype"/>
+      </a>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li>
+          <a th:href="@{/}" th:text="#{layout.menu.home}"
+             th:classappend="${#httpServletRequest.requestURI eq '/' ? 'text-light-blue' : 'text-secondary-beige'}"
+             class="nav-link-custom px-2">Home</a>
+        </li>
+      </ul>
+
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            <label for="flexRadioDefault1"></label>
+            <a th:href="@{''(lang='lt')}">
+              <img th:src="@{/img/language_lt.png}"
+                   class="language-selector" alt="Lietuviškai"/>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                   checked>
+            <label for="flexRadioDefault2"></label>
+            <a th:href="@{''(lang='en')}">
+              <img th:src="@{/img/language_en.png}"
+                   class="language-selector" alt="English"/>
+            </a>
+          </div>
+        </li>
+      </ul>
+
+      <th:block>
+        <div class="text-end">
+          <form th:action="@{/login}" method="get">
+            <button class="btn btn-custom me-2" th:text="#{layout.menu.login}">Login</button>
+          </form>
+        </div>
+        <div class="text-end">
+          <form th:action="@{/public/signUpForm}" method="get">
+            <button class="btn btn-custom" th:text="#{layout.menu.signUp}">Sign-up</button>
+          </form>
+        </div>
+      </th:block>
+
+      <div class="text-end">
+        <form th:action="@{/logout}" method="POST">
+          <button class="btn btn-custom me-2" th:text="#{layout.menu.logout}">Logout</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<footer th:fragment="footer" class="footer background-dark">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-center py-3 ">
+      <div class="col-md-4 d-flex align-items-center">
+        <div class="container">
+          <div th:text="#{company.name}"></div>
+          <div th:text="#{company.address}"></div>
+          <div th:text="#{company.bank}"></div>
+          <div th:text="#{company.iban}"></div>
+        </div>
+      </div>
+
+      <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+        <li class="ms-3"><a th:href="#{web.linkedin}">
+          <img th:src="@{/img/networks_linkedin.png}" alt="LinkedIn link">
+        </a></li>
+        <li class="ms-3"><a th:href="#{web.youtube}">
+          <img th:src="@{/img/networks_youtube.png}" alt="Youtube link">
+        </a></li>
+        <li class="ms-3"><a th:href="#{web.facebook}">
+          <img th:src="@{/img/networks_facebook.png}" alt="Facebook link">
+        </a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+
+</html>
