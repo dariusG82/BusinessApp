@@ -8,12 +8,12 @@ import java.util.stream.Stream;
 public class CashRecordTypeConverter implements AttributeConverter<CashRecordType, String> {
 
     @Override
-    public String convertToDatabaseColumn(CashRecordType attribute) {
-        if(attribute == null){
+    public String convertToDatabaseColumn(CashRecordType cashRecordType) {
+        if(cashRecordType == null){
             return null;
         }
 
-        return attribute.getRecord();
+        return cashRecordType.getRecord();
     }
 
     @Override
@@ -21,6 +21,7 @@ public class CashRecordTypeConverter implements AttributeConverter<CashRecordTyp
         if(dbData == null){
             return null;
         }
+
         return Stream.of(CashRecordType.values())
                 .filter(cashRecordType -> cashRecordType.getRecord().equals(dbData))
                 .findFirst()
