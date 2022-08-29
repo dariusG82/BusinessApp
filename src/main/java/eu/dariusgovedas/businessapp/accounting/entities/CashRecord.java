@@ -1,7 +1,7 @@
-package eu.dariusgovedas.businessapp.accounting;
+package eu.dariusgovedas.businessapp.accounting.entities;
 
 import eu.dariusgovedas.businessapp.accounting.enums.CashRecordType;
-import eu.dariusgovedas.businessapp.users.User;
+import eu.dariusgovedas.businessapp.users.entities.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
