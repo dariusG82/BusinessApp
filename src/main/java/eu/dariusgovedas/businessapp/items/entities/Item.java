@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.math.BigDecimal;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Setter
@@ -23,9 +21,22 @@ public class Item {
 
     private String name;
 
-    private BigDecimal purchasePrice;
+    private String description;
 
-    private BigDecimal salePrice;
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "item",
+            orphanRemoval = true
+    )
+    private List<StockItem> stockItems;
 
-    private Long quantity;
+    public void addStockItem(StockItem stockItem){
+        stockItems.add(stockItem);
+        stockItem.setItem(this);
+    }
+
+    public void removeStockItem(StockItem stockItem){
+        stockItems.remove(stockItem);
+        stockItem.setItem(null);
+    }
 }
