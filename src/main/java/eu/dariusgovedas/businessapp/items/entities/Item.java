@@ -16,7 +16,6 @@ import java.util.List;
 public class Item {
 
     @Id
-    @GeneratedValue
     private Long id;
 
     private String name;

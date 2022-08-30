@@ -13,20 +13,22 @@
         </div>
 
         <div class="row mb-2">
-                <div class="col-md-4">
+            <div class="col-md-4">
+                <form th:action="@{/private/item/create}" method="get">
                     <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
                         <div class="col p-4 d-flex flex-column position-static">
                             <h4 th:text="#{warehousePage.create}">New Item</h4>
                             <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
                         </div>
                     </button>
-                </div>
+                </form>
+            </div>
 
 
             <div class="col-md-4">
                 <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
                     <div class="col p-4 d-flex flex-column position-static">
-                        <h4 th:text="#{warehousePage.showItem}">Current Stockr</h4>
+                        <h4 th:text="#{warehousePage.showItem}">Current Stock</h4>
                         <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
                     </div>
                 </button>
