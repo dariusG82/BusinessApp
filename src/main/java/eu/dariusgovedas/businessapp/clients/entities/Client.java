@@ -20,6 +20,8 @@ public class Client {
     @Id
     private Long businessID;
 
+    private String businessName;
+
     @OneToOne(cascade = CascadeType.ALL)
     private RegistrationAddress registrationAddress;
 
