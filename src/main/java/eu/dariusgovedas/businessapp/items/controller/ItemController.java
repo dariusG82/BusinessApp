@@ -4,6 +4,8 @@ import eu.dariusgovedas.businessapp.items.entities.Item;
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
 import eu.dariusgovedas.businessapp.items.service.ItemService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,7 @@ public class ItemController {
     private ItemService itemService;
 
     @GetMapping("/private/item/create")
-    public String openItemForm(Model model){
+    public String openItemForm(Model model) {
 
         model.addAttribute("item", new ItemDTO());
 
@@ -26,10 +28,19 @@ public class ItemController {
     }
 
     @PostMapping("/private/item/create")
-    public String createItemCard(ItemDTO itemDTO){
+    public String createItemCard(ItemDTO itemDTO) {
 
         itemService.createItem(itemDTO);
 
         return "redirect:/private/warehouse";
+    }
+
+    @GetMapping("/private/item/show")
+    public String showWarehouseStock(Pageable pageable, Model model) {
+
+        Page<ItemDTO> warehouseStock = itemService.getWarehouseStock(pageable);
+        model.addAttribute("items", warehouseStock);
+
+        return "warehouseStock";
     }
 }

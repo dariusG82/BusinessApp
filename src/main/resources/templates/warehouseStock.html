@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{warehouseStock.title}, ~{:: #main})">
+<div id="main">
+
+    <div class="container py-4">
+        <div class="p-5 mb4 rounded-3">
+            <div th:if="${not items.empty}" class="container d-md-flex justify-content-md-center page-block">
+                <h2 th:text="#{warehouseStock.tableTitle}">Stock Items</h2>
+            </div>
+            <div th:if="${items.empty}" class="container d-md-flex justify-content-md-center page-block">
+                <h2 th:text="#{warehouseStock.emptyWarehouse}">No Items</h2>
+            </div>
+            <table th:if="${not items.empty}" class="table align-middle mb-0 bg-white page-block">
+                <thead>
+                <tr>
+                    <th th:text="#{item.itemName}">Name</th>
+                    <th th:text="#{item.itemDescription}">Description</th>
+                    <th th:text="#{item.purchasePrice}">Purchase Price</th>
+                    <th th:text="#{item.salePrice}">Sale Price</th>
+                    <th th:text="#{item.quantity}">Quantity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.name}">Name</td>
+                    <td th:text="${item.description}">Description</td>
+                    <td th:text="${item.purchasePrice}">Purchase Price</td>
+                    <td th:text="${item.salePrice}">Sale Price</td>
+                    <td th:text="${item.quantity}">Quantity</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</html>

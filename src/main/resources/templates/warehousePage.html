@@ -26,12 +26,14 @@
 
 
             <div class="col-md-4">
-                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <h4 th:text="#{warehousePage.showItem}">Current Stock</h4>
-                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-                    </div>
-                </button>
+                <form th:action="@{/private/item/show}" method="get">
+                    <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <h4 th:text="#{warehousePage.showItem}">Current Stock</h4>
+                            <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                        </div>
+                    </button>
+                </form>
             </div>
 
             <div class="col-md-4">
