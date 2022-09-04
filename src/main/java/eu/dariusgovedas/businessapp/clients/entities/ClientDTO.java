@@ -17,4 +17,12 @@ public class ClientDTO {
     private String phoneNumber;
     private String emailAddress;
 
+    private String streetAddress;
+
+    public String getStreetAddress() {
+        String houseAddress = street + " " + houseNumber;
+        String flatAddress = houseAddress + "-" + flatNumber;
+
+        return flatNumber == null ? houseAddress : flatAddress;
+    }
 }
