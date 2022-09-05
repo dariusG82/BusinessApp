@@ -16,14 +16,14 @@ public class ClientController {
 
     private ClientService clientService;
 
-    @GetMapping("/private/accounting/createClient")
+    @GetMapping("/private/clients/createClient")
     public String openClientForm(Model model){
 
         model.addAttribute("client", new ClientDTO());
         return "clientForm";
     }
 
-    @PostMapping("/private/accounting/createClient")
+    @PostMapping("/private/clients/createClient")
     public String saveClientData(ClientDTO clientDTO){
 
         clientService.saveClientData(clientDTO);
@@ -31,7 +31,7 @@ public class ClientController {
         return "redirect:/private/accounting";
     }
 
-    @GetMapping("/private/accounting/showClients")
+    @GetMapping("/private/clients/showClients")
     public String showClients(Pageable pageable, Model model){
 
         model.addAttribute("client", new ClientDTO());
@@ -43,7 +43,7 @@ public class ClientController {
         return "clients";
     }
 
-    @GetMapping("/private/accounting/findClient")
+    @GetMapping("/private/clients/findClient")
     public String getSearchResults(Model model, Pageable pageable, ClientDTO clientDTO){
 
         model.addAttribute("client", new ClientDTO());

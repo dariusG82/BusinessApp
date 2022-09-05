@@ -27,6 +27,11 @@
              class="nav-link-custom px-2">Accounting</a>
         </li>
         <li>
+          <a th:href="@{/private/clients}" th:text="#{layout.menu.clients}"
+             th:classappend="${#httpServletRequest.requestURI eq '/clients' ? 'text-lime' : 'text-khaki'}"
+             class="nav-link-custom px-2">Clients</a>
+        </li>
+        <li>
           <a th:href="@{/private/sales}" th:text="#{layout.menu.sales}"
              th:classappend="${#httpServletRequest.requestURI eq '/sales' ? 'text-lime' : 'text-khaki'}"
              class="nav-link-custom px-2">Accounting</a>

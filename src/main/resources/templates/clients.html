@@ -4,7 +4,7 @@
 <div id="main">
 
     <div class="container py-4">
-        <form method="get" th:object="${client}" th:action="@{/private/accounting/findClient}">
+        <form method="get" th:object="${client}" th:action="@{/private/clients/findClient}">
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="inputClientID" class="col-sm-12 col-form-label" th:text="#{findClient.clientID}">Client

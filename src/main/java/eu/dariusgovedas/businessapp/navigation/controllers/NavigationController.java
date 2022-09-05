@@ -26,6 +26,12 @@ public class NavigationController {
         return "accountingPage";
     }
 
+    @GetMapping("/private/clients")
+    public String openClientsPage(){
+
+        return "clientsPage";
+    }
+
     @GetMapping("/private/sales")
     public String openSalesPage(){
 
