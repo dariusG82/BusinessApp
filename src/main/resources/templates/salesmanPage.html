@@ -3,71 +3,73 @@
       th:replace="fragments/layout :: layout(#{salesPage.title}, ~{:: #main})">
 <div id="main">
 
-  <div class="container py-4">
+    <div class="container py-4">
 
-    <div class="p-5 mb-4 background-light rounded-3">
-      <div class="container-fluid custom-title-card">
-        <h2 class="display-5 fw-bold" th:text="#{salesPage.salesSection}">Sales section Title</h2>
-        <p class="col-md-8" th:text="#{loremIpsum25}">Content</p>
-      </div>
+        <div class="p-5 mb-4 background-light rounded-3">
+            <div class="container-fluid custom-title-card">
+                <h2 class="display-5 fw-bold" th:text="#{salesPage.salesSection}">Sales section Title</h2>
+                <p class="col-md-8" th:text="#{loremIpsum25}">Content</p>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{salesPage.saleOps}">Create Sale Order</h4>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{salesPage.returnOps}">Create Return Order</h4>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{salesPage.orderOps}">Create Purchase Order</h4>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{salesPage.salesDocs}">Find Sales Document</h4>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{salesPage.returnDocs}">Find Return Document</h4>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{salesPage.orderDocs}">Find Order</h4>
+                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
+                    </div>
+                </button>
+            </div>
+        </div>
     </div>
-
-    <div class="row mb-2">
-      <div class="col-md-4">
-        <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-          <div class="col p-4 d-flex flex-column position-static">
-            <h4 th:text="#{salesPage.saleOps}">Create Sale Order</h4>
-            <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-          </div>
-        </button>
-      </div>
-
-      <div class="col-md-4">
-        <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-          <div class="col p-4 d-flex flex-column position-static">
-            <h4 th:text="#{salesPage.returnOps}">Create Return Order</h4>
-            <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-          </div>
-        </button>
-      </div>
-
-      <div class="col-md-4">
-        <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-          <div class="col p-4 d-flex flex-column position-static">
-            <h4 th:text="#{salesPage.orderOps}">Create Purchase Order</h4>
-            <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-          </div>
-        </button>
-      </div>
-
-      <div class="col-md-4">
-        <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-          <div class="col p-4 d-flex flex-column position-static">
-            <h4 th:text="#{salesPage.salesDocs}">Find Sales Document</h4>
-            <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-          </div>
-        </button>
-      </div>
-
-      <div class="col-md-4">
-        <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-          <div class="col p-4 d-flex flex-column position-static">
-            <h4 th:text="#{salesPage.returnDocs}">Find Return Document</h4>
-            <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-          </div>
-        </button>
-      </div>
-
-      <div class="col-md-4">
-        <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-          <div class="col p-4 d-flex flex-column position-static">
-            <h4 th:text="#{salesPage.orderDocs}">Find Order</h4>
-            <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-          </div>
-        </button>
-      </div>
-    </div>
-  </div>
 
 </div>
 </html>

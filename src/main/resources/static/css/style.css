@@ -36,6 +36,13 @@ main {
     background-color: var(--dusty);
     color: var(--old);
     font-size: small;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.class-top {
+    width: 200px;
+    height: 180px;
 }
 
 .text-lime {

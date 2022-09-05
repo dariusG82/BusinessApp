@@ -8,105 +8,100 @@
         <div class="p-5 mb-4 background-light rounded-3">
             <div class="container-fluid custom-title-card">
                 <h2 class="display-5 fw-bold" th:text="#{accountingPage.accountingSection}">Sales section Title</h2>
+                <p class="col-md-8" th:text="#{accountingPage.mainText}">Content</p>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{accountingPage.balance}">Balance</h4>
+                        <p class="card-text mb-auto" th:text="#{accountingPage.balanceText}">Content</p>
+                    </div>
+                </button>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{accountingPage.sellerSales}">Sales by sellerID</h4>
+                        <p class="card-text mb-auto" th:text="#{accountingPage.sellerText}">Content</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{accountingPage.salesDocuments}">Sales Documents</h4>
+                        <p class="card-text mb-auto" th:text="#{accountingPage.salesDocsText}">Content</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{accountingPage.returnDocuments}">Return Documents</h4>
+                        <p class="card-text mb-auto" th:text="#{accountingPage.returnDocsText}">Content</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h4 th:text="#{accountingPage.purchaseDocuments}">Purchase Docs</h4>
+                        <p class="card-text mb-auto" th:text="#{accountingPage.purchaseDocsText}">Content</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="p-5 mb-4 background-light rounded-3">
+            <div class="container-fluid custom-title-card">
+                <h2 class="display-5 fw-bold" th:text="#{accountingPage.clientsSection}">Clients section Title</h2>
                 <p class="col-md-8" th:text="#{loremIpsum25}">Content</p>
             </div>
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-4">
-                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <h4 th:text="#{accountingPage.dayBalance}">Days balance</h4>
-                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-                    </div>
-                </button>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <form th:action="@{/private/accounting/createClient}" method="get">
+                    <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <h3 th:text="#{accountingPage.clientRegistration}">Add Client</h3>
+                            <p class="card-text mb-auto" th:text="#{loremIpsum50}">Content</p>
+                        </div>
+                    </button>
+                </form>
             </div>
 
-            <div class="col-md-4">
-                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <h4 th:text="#{accountingPage.monthBalance}">Month balance</h4>
-                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-                    </div>
-                </button>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <form th:action="@{/private/accounting/showClients}" method="get">
+                    <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <h3 th:text="#{accountingPage.showClients}">Show Client</h3>
+                            <p class="card-text mb-auto" th:text="#{loremIpsum50}">Content</p>
+                        </div>
+                    </button>
+                </form>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
                     <div class="col p-4 d-flex flex-column position-static">
-                        <h4 th:text="#{accountingPage.salesDocuments}">Sales Documents</h4>
-                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-                    </div>
-                </button>
-            </div>
-
-            <div class="col-md-4">
-                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <h4 th:text="#{accountingPage.returnDocuments}">Return Documents</h4>
-                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-                    </div>
-                </button>
-            </div>
-
-            <div class="col-md-4">
-                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <h4 th:text="#{accountingPage.purchaseDocuments}">Purchase Docs</h4>
-                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-                    </div>
-                </button>
-            </div>
-
-            <div class="col-md-4">
-                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <h4 th:text="#{accountingPage.sellerSales}">Sales by sellerID</h4>
-                        <p class="card-text mb-auto" th:text="#{loremIpsum25}">Content</p>
-                    </div>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="p-5 mb-4 background-light rounded-3">
-        <div class="container-fluid custom-title-card">
-            <h2 class="display-5 fw-bold" th:text="#{accountingPage.clientsSection}">Clients section Title</h2>
-            <p class="col-md-8" th:text="#{loremIpsum25}">Content</p>
-        </div>
-    </div>
-
-    <div class="row mb-2">
-        <div class="col-md-4">
-            <form th:action="@{/private/accounting/createClient}" method="get">
-                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <h3 th:text="#{accountingPage.clientRegistration}">Add Client</h3>
+                        <h3 th:text="#{accountingPage.deleteClient}">Remove Client</h3>
                         <p class="card-text mb-auto" th:text="#{loremIpsum50}">Content</p>
                     </div>
                 </button>
-            </form>
-        </div>
-
-        <div class="col-md-4">
-            <form th:action="@{/private/accounting/showClients}" method="get">
-                <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <h3 th:text="#{accountingPage.showClients}">Show Client</h3>
-                        <p class="card-text mb-auto" th:text="#{loremIpsum50}">Content</p>
-                    </div>
-                </button>
-            </form>
-        </div>
-
-        <div class="col-md-4">
-            <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
-                <div class="col p-4 d-flex flex-column position-static">
-                    <h3 th:text="#{accountingPage.deleteClient}">Remove Client</h3>
-                    <p class="card-text mb-auto" th:text="#{loremIpsum50}">Content</p>
-                </div>
-            </button>
+            </div>
         </div>
     </div>
 </div>
+
+
+
 </html>
