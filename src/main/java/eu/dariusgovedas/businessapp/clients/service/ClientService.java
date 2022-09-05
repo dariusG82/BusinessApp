@@ -156,4 +156,23 @@ public class ClientService {
             return client.getRegistrationAddress().getCity().toUpperCase().contains(clientDTO.getCity().toUpperCase());
         }
     }
+
+    public ClientDTO getClientById(Long id) {
+        Client client = clientRepository.findByBusinessID(id);
+
+        return getClientDTOFromClient(client);
+    }
+
+    @Transactional
+    public void updateClient(ClientDTO clientDTO) {
+        Client client = clientRepository.findByBusinessID(clientDTO.getBusinessID());
+        client.setBusinessName(clientDTO.getBusinessName());
+        client.getRegistrationAddress().setCountry(clientDTO.getCountry());
+        client.getRegistrationAddress().setCity(clientDTO.getCity());
+        client.getRegistrationAddress().setStreet(clientDTO.getStreet());
+        client.getRegistrationAddress().setHouseNumber(clientDTO.getHouseNumber());
+        client.getRegistrationAddress().setFlatNumber(clientDTO.getFlatNumber());
+        client.getContactDetails().setPhoneNumber(clientDTO.getPhoneNumber());
+        client.getContactDetails().setEmailAddress(clientDTO.getEmailAddress());
+    }
 }

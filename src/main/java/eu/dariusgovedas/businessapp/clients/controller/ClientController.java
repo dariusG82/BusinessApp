@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -51,5 +53,21 @@ public class ClientController {
         model.addAttribute("clients", clientService.searchForClient(pageable, clientDTO));
 
         return "clients";
+    }
+
+    @GetMapping("/private/clients/edit/{id}")
+    public String openClientEditForm(@PathVariable Long id, Model model){
+
+        model.addAttribute("client", clientService.getClientById(id));
+
+        return "clientForm";
+    }
+
+    @PostMapping("/private/clients/edit/{id}")
+    public String updateClientData(@PathVariable Long id, ClientDTO clientDTO){
+
+        clientService.updateClient(clientDTO);
+
+        return "redirect:/private/clients/showClients";
     }
 }

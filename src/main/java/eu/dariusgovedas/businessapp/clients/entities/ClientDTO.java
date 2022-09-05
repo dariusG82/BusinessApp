@@ -23,6 +23,6 @@ public class ClientDTO {
         String houseAddress = street + " " + houseNumber;
         String flatAddress = houseAddress + "-" + flatNumber;
 
-        return flatNumber == null ? houseAddress : flatAddress;
+        return flatNumber == null || flatNumber.equals("") ? houseAddress : flatAddress;
     }
 }

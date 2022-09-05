@@ -51,6 +51,7 @@
             <th th:text="#{client.streetAddress}">StreetAddress</th>
             <th th:text="#{client.phone}">Phone</th>
             <th th:text="#{client.email}">Email</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -62,6 +63,13 @@
             <td th:text="${client.streetAddress}">Street Address</td>
             <td th:text="${client.phoneNumber}">Phone</td>
             <td th:text="${client.emailAddress}">Email</td>
+            <td>
+                <form th:action="@{/private/clients/edit/{id}(id=${client.businessID})}" method="get">
+                    <button id="editClient" class="edit-delete-update">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
