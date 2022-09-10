@@ -18,9 +18,14 @@ public class Item {
     @Id
     private Long id;
 
+    private Long itemNumber;
+
     private String name;
 
     private String description;
+
+    @ManyToOne
+    private ItemCategory category;
 
     @OneToMany(
             cascade = CascadeType.ALL,

@@ -1,7 +1,7 @@
 package eu.dariusgovedas.businessapp.items.controller;
 
-import eu.dariusgovedas.businessapp.items.entities.Item;
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
+import eu.dariusgovedas.businessapp.items.service.ItemCategoryService;
 import eu.dariusgovedas.businessapp.items.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,17 +12,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequestMapping
 @AllArgsConstructor
 public class ItemController {
 
     private ItemService itemService;
+    private ItemCategoryService itemCategoryService;
 
     @GetMapping("/private/item/create")
     public String openItemForm(Model model) {
 
         model.addAttribute("item", new ItemDTO());
+
+        List<String> options = itemCategoryService.getCategories();
+        model.addAttribute("options", options);
 
         return "itemForm";
     }

@@ -7,6 +7,14 @@
 
         <form method="post" th:object="${item}" th:action="@{''}">
             <div class="row mb-3">
+                <label for="inputCategory" class="col-sm-2 col-form-label" th:text="#{item.category}">Item Name</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="inputCategory" th:field="*{category}">
+                        <option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
                 <label for="inputItemName" class="col-sm-2 col-form-label" th:text="#{item.itemName}">Item Name</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="inputItemName" th:field="*{name}">

@@ -14,6 +14,8 @@
             <table th:if="${not items.empty}" class="table align-middle mb-0 bg-white page-block">
                 <thead>
                 <tr>
+                    <th th:text="#{item.itemNumber}">Number</th>
+                    <th th:text="#{item.category}">Category</th>
                     <th th:text="#{item.itemName}">Name</th>
                     <th th:text="#{item.itemDescription}">Description</th>
                     <th th:text="#{item.purchasePrice}">Purchase Price</th>
@@ -23,6 +25,8 @@
                 </thead>
                 <tbody>
                 <tr th:each="item : ${items}">
+                    <td th:text="${item.itemNumber}">Number</td>
+                    <th th:text="${item.category}">Category</th>
                     <td th:text="${item.name}">Name</td>
                     <td th:text="${item.description}">Description</td>
                     <td th:text="${item.purchasePrice}">Purchase Price</td>

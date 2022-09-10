@@ -1,8 +1,10 @@
 package eu.dariusgovedas.businessapp.items.service;
 
 import eu.dariusgovedas.businessapp.items.entities.Item;
+import eu.dariusgovedas.businessapp.items.entities.ItemCategory;
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
 import eu.dariusgovedas.businessapp.items.entities.StockItem;
+import eu.dariusgovedas.businessapp.items.repository.ItemCategoryRepository;
 import eu.dariusgovedas.businessapp.items.repository.ItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,16 +22,24 @@ import java.util.List;
 public class ItemService {
 
     private ItemRepository itemRepository;
+    private ItemCategoryRepository itemCategoryRepository;
 
     @Transactional
     public void createItem(ItemDTO itemDTO) {
         Item item = new Item();
+        ItemCategory category = itemCategoryRepository.findByCategoryNameContainingIgnoreCase(itemDTO.getCategory());
 
         item.setId(generateID());
+        item.setItemNumber(generateItemNumber(category.getId(), item.getId()));
+        item.setCategory(category);
         item.setName(itemDTO.getName());
         item.setDescription(itemDTO.getDescription());
 
         itemRepository.save(item);
+    }
+
+    private Long generateItemNumber(Long catID, Long itemID) {
+        return catID * 100000 + itemID;
     }
 
     private Long generateID() {
@@ -53,8 +63,7 @@ public class ItemService {
             if (item.getStockItems().size() > 0) {
                 List<StockItem> itemList = item.getStockItems();
                 stockItemList.addAll(itemList);
-            }
-            else {
+            } else {
                 StockItem stockItem = new StockItem();
                 stockItem.setItem(item);
                 stockItem.setPurchasePrice(BigDecimal.ZERO);
@@ -71,7 +80,9 @@ public class ItemService {
         for (StockItem stockItem : stockItemList) {
             ItemDTO itemDTO = new ItemDTO();
 
+            itemDTO.setItemNumber(stockItem.getItem().getItemNumber());
             itemDTO.setName(stockItem.getItem().getName());
+            itemDTO.setCategory(stockItem.getItem().getCategory().getCategoryName());
             itemDTO.setDescription(stockItem.getItem().getDescription());
             itemDTO.setPurchasePrice(stockItem.getPurchasePrice());
             itemDTO.setSalePrice(stockItem.getSalePrice());
@@ -79,7 +90,6 @@ public class ItemService {
 
             itemDTOList.add(itemDTO);
         }
-
         return itemDTOList;
     }
 }

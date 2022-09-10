@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 @Getter
 public class ItemDTO {
 
+    private Long itemNumber;
     private String name;
+    private String category;
     private String description;
     private BigDecimal purchasePrice;
     private BigDecimal salePrice;
