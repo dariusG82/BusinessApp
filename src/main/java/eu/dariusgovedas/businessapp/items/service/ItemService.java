@@ -4,7 +4,6 @@ import eu.dariusgovedas.businessapp.items.entities.Item;
 import eu.dariusgovedas.businessapp.items.entities.ItemCategory;
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
 import eu.dariusgovedas.businessapp.items.entities.StockItem;
-import eu.dariusgovedas.businessapp.items.repository.ItemCategoryRepository;
 import eu.dariusgovedas.businessapp.items.repository.ItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,12 +21,12 @@ import java.util.List;
 public class ItemService {
 
     private ItemRepository itemRepository;
-    private ItemCategoryRepository itemCategoryRepository;
+    private ItemPropertiesService propertiesService;
 
     @Transactional
     public void createItem(ItemDTO itemDTO) {
         Item item = new Item();
-        ItemCategory category = itemCategoryRepository.findByCategoryNameContainingIgnoreCase(itemDTO.getCategory());
+        ItemCategory category = propertiesService.getItemCategory(itemDTO.getCategory());
 
         item.setId(generateID());
         item.setItemNumber(generateItemNumber(category.getId(), item.getId()));

@@ -1,7 +1,7 @@
 package eu.dariusgovedas.businessapp.items.controller;
 
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
-import eu.dariusgovedas.businessapp.items.service.ItemCategoryService;
+import eu.dariusgovedas.businessapp.items.service.ItemPropertiesService;
 import eu.dariusgovedas.businessapp.items.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,14 +20,14 @@ import java.util.List;
 public class ItemController {
 
     private ItemService itemService;
-    private ItemCategoryService itemCategoryService;
+    private ItemPropertiesService itemPropertiesService;
 
     @GetMapping("/private/item/create")
     public String openItemForm(Model model) {
 
         model.addAttribute("item", new ItemDTO());
 
-        List<String> options = itemCategoryService.getCategories();
+        List<String> options = itemPropertiesService.getCategories();
         model.addAttribute("options", options);
 
         return "itemForm";
