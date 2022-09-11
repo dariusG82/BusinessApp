@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{editAccountingData.title}, ~{:: #main})">
+<div id="main">
+
+    <div class="container py-4">
+
+        <form method="post" th:object="${bankData}" th:action="@{/private/addBankData}">
+            <h5 class="text-dark">Add new Bank information</h5>
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label for="bankName" class="col-sm-10 col-form-label" th:text="#{bank.bankName}">Bank Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="bankName" th:field="*{bankName}">
+                    </div>
+                </div>
+                <div class="col-3">
+                    <label for="bankSwift" class="col-sm-10 col-form-label" th:text="#{bank.swift}">Bank Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="bankSwift" th:field="*{bankSwift}">
+                    </div>
+                </div>
+                <div class="col-5">
+                    <label for="bankAddress" class="col-sm-10 col-form-label" th:text="#{bank.address}">Bank
+                        Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="bankAddress" th:field="*{bankAddress}">
+                    </div>
+                </div>
+
+            </div>
+            <button type="submit" class="btn btn-custom" th:text="#{editData.add}">Save</button>
+        </form>
+
+        <form method="post" th:object="${bankData}" th:action="@{/private/addAccount}">
+            <h5 class="text-dark">Add new Bank Account information</h5>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label for="bankName1" class="col-sm-12 col-form-label" th:text="#{bank.bankName}">Bank Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="bankName1" th:field="*{bankName}">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <label for="bankAccount" class="col-sm-12 col-form-label" th:text="#{bank.account}">Bank
+                        Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="bankAccount" th:field="*{bankAccountNumber}">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-custom" th:text="#{editData.add}">Save</button>
+        </form>
+    </div>
+
+</div>
+</html>

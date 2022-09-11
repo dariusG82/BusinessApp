@@ -68,6 +68,17 @@
           </button>
         </form>
       </div>
+
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <form th:action="@{/private/editAccountingData}" method="get">
+          <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+            <div class="col p-4 d-flex flex-column position-static">
+              <h3 th:text="#{adminPage.accountingData}">Item Data</h3>
+              <p class="card-text mb-auto" th:text="#{adminPage.accountingDataText}">Content</p>
+            </div>
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 

@@ -48,6 +48,11 @@ main {
     color: var(--khaki);
 }
 
+.text-dark {
+    color: var(--dark);
+    text-decoration: underline;
+}
+
 #flexRadioDefault1, #flexRadioDefault2 {
     display: none;
 }
