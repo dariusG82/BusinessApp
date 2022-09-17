@@ -157,15 +157,19 @@ public class ClientService {
         }
     }
 
-    public ClientDTO getClientById(Long id) {
-        Client client = clientRepository.findByBusinessID(id);
+    public Client getClientById(Long id) {
+        return clientRepository.findByBusinessID(id);
+    }
+
+    public ClientDTO getClientDTOById(Long id) {
+        Client client = getClientById(id);
 
         return getClientDTOFromClient(client);
     }
 
     @Transactional
-    public void updateClient(ClientDTO clientDTO) {
-        Client client = clientRepository.findByBusinessID(clientDTO.getBusinessID());
+    public void updateClient(Long id, ClientDTO clientDTO) {
+        Client client = clientRepository.findByBusinessID(id);
         client.setBusinessName(clientDTO.getBusinessName());
         client.getRegistrationAddress().setCountry(clientDTO.getCountry());
         client.getRegistrationAddress().setCity(clientDTO.getCity());

@@ -1,14 +1,12 @@
 package eu.dariusgovedas.businessapp.clients.entities;
 
+import eu.dariusgovedas.businessapp.clients.enums.ClientType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 @Setter
@@ -21,6 +19,9 @@ public class Client {
     private Long businessID;
 
     private String businessName;
+
+    @Enumerated(value = EnumType.STRING)
+    private ClientType clientType;
 
     @OneToOne(cascade = CascadeType.ALL)
     private RegistrationAddress registrationAddress;
