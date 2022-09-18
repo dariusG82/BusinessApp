@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class ItemPropertiesController {
 
-    private ItemPropertiesService propertiesService;
+    private ItemPropertiesService itemPropertiesService;
 
     @GetMapping("/private/editItemData")
     public String openDataForm(Model model){
@@ -27,7 +27,7 @@ public class ItemPropertiesController {
     @PostMapping("/private/editItemData/saveCategory")
     public String saveNewCategory(ItemPropertiesDTO propertiesDTO){
 
-        propertiesService.saveNewCategory(propertiesDTO);
+        itemPropertiesService.saveNewCategory(propertiesDTO);
 
         return "redirect:/private/editItemData";
     }

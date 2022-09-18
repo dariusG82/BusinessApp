@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{purchaseForm.title}, ~{:: #main})">
+<div id="main">
+
+    <div class="container py-4">
+        <form method="get" th:object="${supplier}" th:action="@{/private/sales/findSupplier}">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="inputClientID" class="col-sm-12 col-form-label"
+                           th:text="#{findSupplier.supplierID}">Client ID</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputClientID" th:field="*{businessID}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputClient" class="col-sm-12 col-form-label"
+                           th:text="#{findSupplier.name}">Supplier Name</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputClient" th:field="*{businessName}">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-custom" th:text="#{findSupplier.button}">Find Supplier</button>
+        </form>
+    </div>
+    <div th:if="${results.empty}" class="container d-md-flex justify-content-md-center page-block">
+        <h1 th:text="#{clients.notFound}">No clients found</h1>
+    </div>
+    <table th:if="${not results.empty}" class="table align-middle background-light page-block">
+        <thead>
+        <tr>
+            <th th:text="#{client.clientID}">Business ID</th>
+            <th th:text="#{client.business}">Business Name</th>
+            <th th:text="#{client.country}">Country</th>
+            <th th:text="#{client.city}">City</th>
+            <th th:text="#{client.streetAddress}">Street Address</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="partner : ${results}">
+            <td th:text="${partner.businessID}">Business ID</td>
+            <td th:text="${partner.businessName}">Business Name</td>
+            <td th:text="${partner.country}">Country</td>
+            <td th:text="${partner.city}">City</td>
+            <td th:text="${partner.streetAddress}">Street Address</td>
+            <td>
+                <form th:action="@{/private/sales/createPO/{id}(id=${partner.businessID})}" method="get">
+                    <button id="createOrder" class="edit-delete-update">
+                        <i class="fa-regular fa-square"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

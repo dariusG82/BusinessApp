@@ -15,5 +15,8 @@ public class ItemDTO {
     private String description;
     private BigDecimal purchasePrice;
     private BigDecimal salePrice;
-    private Long quantity;
+    private Long stockQuantity;
+
+    private Long orderQuantity;
+    private BigDecimal orderPrice;
 }

@@ -1,6 +1,5 @@
 package eu.dariusgovedas.businessapp.sales.entities;
 
-import eu.dariusgovedas.businessapp.items.entities.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +28,12 @@ public class OrderLine {
 
     private BigDecimal purchasePrice;
 
+    private BigDecimal totalPrice;
+
     @ManyToOne
     private Order order;
+
+    public BigDecimal getTotalPrice() {
+        return BigDecimal.valueOf(quantity).multiply(purchasePrice);
+    }
 }

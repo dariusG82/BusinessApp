@@ -21,12 +21,12 @@ import java.util.List;
 public class ItemService {
 
     private ItemRepository itemRepository;
-    private ItemPropertiesService propertiesService;
+    private ItemPropertiesService itemPropertiesService;
 
     @Transactional
     public void createItem(ItemDTO itemDTO) {
         Item item = new Item();
-        ItemCategory category = propertiesService.getItemCategory(itemDTO.getCategory());
+        ItemCategory category = itemPropertiesService.getItemCategory(itemDTO.getCategory());
 
         item.setId(generateID());
         item.setItemNumber(generateItemNumber(category.getId(), item.getId()));
@@ -85,10 +85,53 @@ public class ItemService {
             itemDTO.setDescription(stockItem.getItem().getDescription());
             itemDTO.setPurchasePrice(stockItem.getPurchasePrice());
             itemDTO.setSalePrice(stockItem.getSalePrice());
-            itemDTO.setQuantity(stockItem.getQuantity());
+            itemDTO.setStockQuantity(stockItem.getQuantity());
 
             itemDTOList.add(itemDTO);
         }
         return itemDTOList;
     }
+
+    public ItemDTO getItemDTOByItemNumber(Long number){
+        Item item = itemRepository.findItemByItemNumber(number);
+
+        return item == null ? new ItemDTO() : getItemDTOFromItem(item);
+    }
+
+    private ItemDTO getItemDTOFromItem(Item item) {
+        ItemDTO itemDTO = new ItemDTO();
+
+        itemDTO.setItemNumber(item.getItemNumber());
+        itemDTO.setName(item.getName());
+        itemDTO.setCategory(item.getCategory().getCategoryName());
+        itemDTO.setDescription(item.getDescription());
+        BigDecimal salePrice = getSalePrice(item);
+        itemDTO.setSalePrice(salePrice);
+        Long quantity = getQuantity(item, salePrice);
+        itemDTO.setStockQuantity(quantity);
+
+        return itemDTO;
+    }
+
+    private BigDecimal getSalePrice(Item item) {
+        List<StockItem> stockItems = item.getStockItems();
+        for(StockItem stockItem : stockItems){
+            if(stockItem.getQuantity() > 0){
+                return stockItem.getSalePrice();
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+    private Long getQuantity(Item item, BigDecimal salePrice) {
+        if(salePrice.equals(BigDecimal.ZERO)){
+            return 0L;
+        }
+        return item.getStockItems().stream()
+                .filter(stockItem -> stockItem.getSalePrice().equals(salePrice))
+                .findFirst()
+                .orElseThrow().getQuantity();
+
+    }
+
 }

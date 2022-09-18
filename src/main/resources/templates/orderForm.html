@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{purchaseForm.title}, ~{:: #main})">
+<div id="main">
+
+    <div class="container py-1">
+        <p>Order Number</p>
+        <p th:text="${#servletContext.getAttribute('orderDTO').getOrderNumber()}"></p>
+    </div>
+
+    <div class="container py-1">
+        <form method="get" th:object="${product}" th:action="@{/private/warehouse/findProduct}">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="inputClientID" class="col-sm-12 col-form-label"
+                           th:text="#{item.itemNumber}">Item ID</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputClientID" th:field="*{itemNumber}">
+                    </div>
+                </div>
+                <div class="col-md-6" style="margin-top: 1.5vh">
+                    <label></label>
+                    <div>
+                        <button type="submit" class="btn btn-custom" th:text="#{button.findProduct}">Find product
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div th:if="${result ne null}" class="container py-1">
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <label for="product-name" class="col-sm-12 col-form-label col-order-form"
+                       th:text="#{item.itemName}">Item ID</label>
+                <div class="col-sm-12 col-order-form" id="product-name" th:text="${result.itemName}">Product Name</div>
+            </div>
+            <div class="col-md-2">
+                <label for="product-quantity" class="col-sm-12 col-form-label col-order-form"
+                       th:text="#{product.stock.quantity}">Item ID</label>
+                <div class="col-sm-12 col-order-form" id="product-quantity" th:text="${result.stockQuantity}">Product
+                    Quantity
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label for="product-price" class="col-sm-12 col-form-label col-order-form"
+                       th:text="#{item.salePrice}">Sale Price</label>
+                <div class="col-sm-12 col-order-form" id="product-price" th:text="${result.purchasePrice}">Sale Price
+                </div>
+            </div>
+            <div class="col-md-2">
+                <form method="get"
+                      th:action="@{/private/sales/updateQuantity/{number}(number=${result.itemNumber})}">
+                    <div class="row mb-3">
+                        <div class="col-md-6" style="margin-top: 1.5vh">
+                            <label for="inputID" class="col-sm-12 col-form-label" th:text="#{product.order.quantity}">Item
+                                ID</label>
+                            <div class="col-sm-12">
+                                <input type="number" class="form-control" id="inputID"
+                                       th:field="*{result.orderQuantity}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label></label>
+                            <div>
+                                <button type="submit" class="btn btn-custom" th:text="#{button.updateQuantity}">Find
+                                    product
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div th:if="${result.orderQuantity gt 0}" class="col-md-2">
+                <label for="product-purchase-pcs" class="col-sm-12 col-form-label col-order-form"
+                       th:text="#{product.order.quantity}">Item ID</label>
+                <div class="col-sm-12 col-order-form" id="product-purchase-pcs" th:text="${result.orderQuantity}">
+                    Product Quantity
+                </div>
+            </div>
+            <div th:if="${result.linePrice gt 0}" class="col-md-2">
+                <label for="product-purchase-price" class="col-sm-12 col-form-label col-order-form"
+                       th:text="#{product.order.totalPrice}">Sale Price</label>
+                <div class="col-sm-12 col-order-form" id="product-purchase-price" th:text="${result.linePrice}">Sale
+                    Price
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:if="${result ne null}" class="container py-1">
+        <div class="row mb-3">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <form method="post"
+                      th:action="@{/private/sales/saveOrderLine/{number}/{quantity}(number=${result.itemNumber}, quantity=${result.orderQuantity})}">
+                    <label></label>
+                    <div>
+                        <button type="submit" class="btn btn-custom center" th:text="#{button.saveOrderLine}">Save order
+                            line
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+
+    <table th:if="${not orderLines.empty}" class="table align-middle background-light page-block">
+        <thead>
+        <tr>
+            <td th:text="#{orderLine.itemName}">Item</td>
+            <td th:text="#{orderLine.purchaseQuantity}">Quantity</td>
+            <td th:text="#{orderLine.itemPrice}">Item Price</td>
+            <td th:text="#{orderLine.totalPrice}">Line Price</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="line : ${orderLines}">
+            <td th:text="${line.itemName}"></td>
+            <td th:text="${line.orderQuantity}"></td>
+            <td th:text="${line.purchasePrice}"></td>
+            <td th:text="${line.linePrice}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${not orderLines.empty}" class="container py-1">
+        <div class="row mb-3">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-3 order-pricing">
+                <p th:text="#{order.totalPrice}">Total Price</p>
+            </div>
+            <div class="col-md-3 order-pricing">
+                <p th:text="${#servletContext.getAttribute('orderDTO').getAmount()}">0000</p>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-3 order-pricing">
+                <p th:text="#{order.vat}">Total Price</p>
+            </div>
+            <div class="col-md-3 order-pricing">
+                <p th:text="${#servletContext.getAttribute('orderDTO').getVatAmount()}">0000</p>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-3 order-pricing">
+                <p th:text="#{order.amountWithVAT}">Total Price</p>
+            </div>
+            <div class="col-md-3 order-pricing">
+                <p th:text="${#servletContext.getAttribute('orderDTO').getAmountWithVAT()}">0000</p>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
