@@ -2,7 +2,9 @@ package eu.dariusgovedas.businessapp.sales.controllers;
 
 import eu.dariusgovedas.businessapp.clients.entities.ClientDTO;
 import eu.dariusgovedas.businessapp.clients.service.ClientService;
+import eu.dariusgovedas.businessapp.common.PDFExporter;
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
+import eu.dariusgovedas.businessapp.sales.entities.InvoiceDTO;
 import eu.dariusgovedas.businessapp.sales.entities.OrderDTO;
 import eu.dariusgovedas.businessapp.sales.entities.OrderLineDTO;
 import eu.dariusgovedas.businessapp.sales.enums.OrderType;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +35,7 @@ public class OrdersController {
     private OrdersService ordersService;
 
     @GetMapping("/private/sales/purchaseOrder")
-    public String openPurchaseOrderForm(Model model){
+    public String openPurchaseOrderForm(Model model) {
 
         model.addAttribute("supplier", new ClientDTO());
         model.addAttribute("order", new OrderDTO());
@@ -41,7 +46,7 @@ public class OrdersController {
     }
 
     @GetMapping("/private/sales/findSupplier")
-    public String getSupplier(Model model, Pageable pageable, ClientDTO clientDTO){
+    public String getSupplier(Model model, Pageable pageable, ClientDTO clientDTO) {
 
         model.addAttribute("supplier", new ClientDTO());
 
@@ -51,7 +56,7 @@ public class OrdersController {
     }
 
     @GetMapping("/private/sales/createPO/{id}")
-    public String createNewPurchaseOrder(@PathVariable Long id, Model model){
+    public String createNewPurchaseOrder(@PathVariable Long id, Model model) {
 
         model.addAttribute("product", new ItemDTO());
         model.addAttribute("orderLines", Collections.emptyList());
@@ -67,7 +72,7 @@ public class OrdersController {
 
 
     @GetMapping("/private/warehouse/findProduct")
-    public String createNewOrderLine(Model model, ItemDTO itemDTO, OrderDTO orderDTO){
+    public String createNewOrderLine(Model model, ItemDTO itemDTO, OrderDTO orderDTO) {
 
         model.addAttribute("product", new ItemDTO());
         model.addAttribute("orderLines", Collections.emptyList());
@@ -77,7 +82,7 @@ public class OrdersController {
     }
 
     @GetMapping("/private/sales/updateQuantity/{number}")
-    public String updateOrderLinePrice(@PathVariable("number") Long number, Model model, OrderLineDTO lineDTO){
+    public String updateOrderLinePrice(@PathVariable("number") Long number, Model model, OrderLineDTO lineDTO) {
 
         OrderDTO order = (OrderDTO) servletContext.getAttribute("orderDTO");
         Long orderNr = order.getOrderNumber();
@@ -90,7 +95,7 @@ public class OrdersController {
     }
 
     @PostMapping("/private/sales/saveOrderLine/{number}/{quantity}")
-    public String saveOrderLine(@PathVariable Long number, @PathVariable Long quantity){
+    public String saveOrderLine(@PathVariable Long number, @PathVariable Long quantity) {
 
 
         OrderDTO order = (OrderDTO) servletContext.getAttribute("orderDTO");
@@ -104,7 +109,7 @@ public class OrdersController {
     }
 
     @GetMapping("/private/orderForm")
-    public String openOrder(Model model){
+    public String openOrder(Model model) {
 
         model.addAttribute("product", new ItemDTO());
 
@@ -114,5 +119,22 @@ public class OrdersController {
         model.addAttribute("orderLines", orderLineList);
 
         return "orderForm";
+    }
+
+    @GetMapping("/private/sales/pdf")
+    public void exportToPdf(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+        String currantDateTime = LocalDate.now().toString();
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=invoice_" + currantDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        OrderDTO orderDTO = (OrderDTO) servletContext.getAttribute("orderDTO");
+
+        InvoiceDTO invoiceDTO = ordersService.getInvoiceDTO(orderDTO);
+
+        PDFExporter exporter = new PDFExporter(invoiceDTO);
+        exporter.export(response);
     }
 }

@@ -1,6 +1,7 @@
 package eu.dariusgovedas.businessapp.clients.repository;
 
 import eu.dariusgovedas.businessapp.clients.entities.Client;
+import eu.dariusgovedas.businessapp.clients.entities.ClientDTO;
 import eu.dariusgovedas.businessapp.clients.enums.ClientType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -31,4 +32,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findByCity(@Param("city") String city);
 
     Client findByClientType(ClientType owner);
+
+    Client findByBusinessName(String clientName);
+
 }

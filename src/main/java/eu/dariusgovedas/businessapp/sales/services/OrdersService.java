@@ -1,13 +1,11 @@
 package eu.dariusgovedas.businessapp.sales.services;
 
 import eu.dariusgovedas.businessapp.clients.entities.Client;
+import eu.dariusgovedas.businessapp.clients.entities.ClientDTO;
 import eu.dariusgovedas.businessapp.clients.service.ClientService;
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
 import eu.dariusgovedas.businessapp.items.service.ItemService;
-import eu.dariusgovedas.businessapp.sales.entities.Order;
-import eu.dariusgovedas.businessapp.sales.entities.OrderDTO;
-import eu.dariusgovedas.businessapp.sales.entities.OrderLine;
-import eu.dariusgovedas.businessapp.sales.entities.OrderLineDTO;
+import eu.dariusgovedas.businessapp.sales.entities.*;
 import eu.dariusgovedas.businessapp.sales.enums.OrderStatus;
 import eu.dariusgovedas.businessapp.sales.enums.OrderType;
 import eu.dariusgovedas.businessapp.sales.repositories.OrderLineRepository;
@@ -162,5 +160,26 @@ public class OrdersService {
         Order updatedOrder = ordersRepository.findByIdAndOrderType(order.getOrderNumber(), order.getOrderType());
 
         return getOrderDTOFromOrder(updatedOrder);
+    }
+
+    public InvoiceDTO getInvoiceDTO(OrderDTO orderDTO) {
+        InvoiceDTO invoiceDTO = new InvoiceDTO();
+        ClientDTO clientDTO = clientService.getClientDTOByName(orderDTO.getClient());
+        ClientDTO supplierDTO = clientService.getClientDTOByName(orderDTO.getSupplier());
+
+        List<OrderLine> orderLines = orderLineRepository.findOrderLines(orderDTO.getOrderNumber());
+        List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
+        if(!(orderLines == null)){
+            for(OrderLine line : orderLines){
+                orderLineDTOS.add(getOrderLineDTOFromOrderLine(line));
+            }
+        }
+
+        invoiceDTO.setCustomer(clientDTO);
+        invoiceDTO.setSupplier(supplierDTO);
+        invoiceDTO.setOrder(orderDTO);
+        invoiceDTO.setOrderLines(orderLineDTOS);
+
+        return invoiceDTO;
     }
 }

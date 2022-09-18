@@ -184,4 +184,9 @@ public class ClientService {
     public Client getBusinessOwner() {
         return clientRepository.findByClientType(ClientType.OWNER);
     }
+
+    public ClientDTO getClientDTOByName(String clientName) {
+        Client client = clientRepository.findByBusinessName(clientName);
+        return getClientDTOFromClient(client);
+    }
 }

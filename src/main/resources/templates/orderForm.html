@@ -157,5 +157,21 @@
             </div>
         </div>
     </div>
+    <div class="container py-1">
+        <form method="get" th:action="@{/private/sales/pdf}">
+            <div class="row mb-3">
+                <div class="col-md-9">
+                </div>
+                <div class="col-md-3" style="margin-top: 1.5vh">
+                    <label></label>
+                    <div>
+                        <button type="submit" class="btn btn-custom" th:text="#{button.printToPDF}">
+                            Find product
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 </html>
