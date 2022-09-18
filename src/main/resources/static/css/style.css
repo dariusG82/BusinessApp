@@ -40,6 +40,11 @@ main {
     min-height: 100%;
 }
 
+.col-order-form{
+    border: black solid 1px;
+    margin-top: 1vh;
+}
+
 .text-lime {
     color: var(--lime);
 }
@@ -100,4 +105,15 @@ main {
 
 footer {
     padding-top: 0.4%;
+}
+
+.center {
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.order-pricing{
+    text-align: right;
 }

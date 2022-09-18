@@ -6,16 +6,24 @@
     <div class="container py-4">
         <form method="post" th:object="${client}" th:action="@{''}">
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="inputClientID" class="col-sm-6 col-form-label" th:text="#{client.clientID}">Client ID</label>
+                <div class="col-md-4">
+                    <label for="inputClientID" class="col-sm-12 col-form-label" th:text="#{client.clientID}">Client ID</label>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="inputClientID" th:field="*{businessID}">
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="inputClient" class="col-sm-6 col-form-label" th:text="#{client.business}">Business</label>
+                <div class="col-md-4">
+                    <label for="inputClient" class="col-sm-12 col-form-label" th:text="#{client.business}">Business</label>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="inputClient" th:field="*{businessName}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="inputClientType" class="col-sm-12 col-form-label" th:text="#{client.type}">Business</label>
+                    <div class="col-sm-12">
+                        <select class="form-control" id="inputClientType" th:field="*{clientType}">
+                            <option th:each="option : ${clientTypeOptions}" th:value="${option}" th:text="${option}"></option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-3">

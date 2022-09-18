@@ -4,6 +4,7 @@ import eu.dariusgovedas.businessapp.clients.entities.Client;
 import eu.dariusgovedas.businessapp.clients.entities.ClientDTO;
 import eu.dariusgovedas.businessapp.clients.entities.ContactDetails;
 import eu.dariusgovedas.businessapp.clients.entities.RegistrationAddress;
+import eu.dariusgovedas.businessapp.clients.enums.ClientType;
 import eu.dariusgovedas.businessapp.clients.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -178,5 +179,9 @@ public class ClientService {
         client.getRegistrationAddress().setFlatNumber(clientDTO.getFlatNumber());
         client.getContactDetails().setPhoneNumber(clientDTO.getPhoneNumber());
         client.getContactDetails().setEmailAddress(clientDTO.getEmailAddress());
+    }
+
+    public Client getBusinessOwner() {
+        return clientRepository.findByClientType(ClientType.OWNER);
     }
 }

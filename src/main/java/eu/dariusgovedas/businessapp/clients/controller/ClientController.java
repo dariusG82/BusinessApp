@@ -1,6 +1,7 @@
 package eu.dariusgovedas.businessapp.clients.controller;
 
 import eu.dariusgovedas.businessapp.clients.entities.ClientDTO;
+import eu.dariusgovedas.businessapp.clients.service.ClientPropertiesService;
 import eu.dariusgovedas.businessapp.clients.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,11 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ClientController {
 
     private ClientService clientService;
+    private ClientPropertiesService clientPropertiesService;
 
     @GetMapping("/private/clients/createClient")
     public String openClientForm(Model model){
 
         model.addAttribute("client", new ClientDTO());
+        model.addAttribute("clientTypeOptions", clientPropertiesService.getClientTypes());
         return "clientForm";
     }
 
