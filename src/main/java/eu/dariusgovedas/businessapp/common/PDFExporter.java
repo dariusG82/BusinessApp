@@ -32,7 +32,8 @@ public class PDFExporter {
 
     private void writeTableHeader(PdfPTable table){
         PdfPCell cell = new PdfPCell();
-        cell.setBackgroundColor(Color.green);
+        cell.setBorder(0);
+        cell.setBackgroundColor(Color.white);
         cell.setPadding(5);
 
         Font font = FontFactory.getFont(FontFactory.HELVETICA);
@@ -46,6 +47,9 @@ public class PDFExporter {
     }
 
     private void writeClientSupplierDataTable(PdfPTable table){
+        PdfPCell cell = table.getDefaultCell();
+        cell.setBorder(0);
+
         table.addCell(supplierDTO.getBusinessName());
         table.addCell(clientDTO.getBusinessName());
         table.addCell(supplierDTO.getBusinessID().toString());
@@ -58,6 +62,7 @@ public class PDFExporter {
 
     private void writeOrderLinesTableHeader(PdfPTable table){
         PdfPCell cell = new PdfPCell();
+        cell.setBorder(0);
         cell.setBackgroundColor(Color.white);
         cell.setPadding(5);
 
