@@ -182,4 +182,10 @@ public class OrdersService {
 
         return invoiceDTO;
     }
+
+    @Transactional
+    public void saveOrder(OrderDTO orderDTO) {
+        Order order = ordersRepository.findByIdAndOrderType(orderDTO.getOrderNumber(), orderDTO.getOrderType());
+        order.setStatus(OrderStatus.FINISHED);
+    }
 }

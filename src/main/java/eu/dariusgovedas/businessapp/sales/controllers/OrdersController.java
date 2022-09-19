@@ -7,6 +7,7 @@ import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
 import eu.dariusgovedas.businessapp.sales.entities.InvoiceDTO;
 import eu.dariusgovedas.businessapp.sales.entities.OrderDTO;
 import eu.dariusgovedas.businessapp.sales.entities.OrderLineDTO;
+import eu.dariusgovedas.businessapp.sales.enums.OrderStatus;
 import eu.dariusgovedas.businessapp.sales.enums.OrderType;
 import eu.dariusgovedas.businessapp.sales.services.OrdersService;
 import lombok.AllArgsConstructor;
@@ -66,13 +67,16 @@ public class OrdersController {
         model.addAttribute("order", orderDTO);
 
         servletContext.setAttribute("orderDTO", orderDTO);
+        servletContext.setAttribute("status", orderDTO.getStatus().toString());
 
         return "orderForm";
     }
 
 
     @GetMapping("/private/warehouse/findProduct")
-    public String createNewOrderLine(Model model, ItemDTO itemDTO, OrderDTO orderDTO) {
+    public String createNewOrderLine(Model model, ItemDTO itemDTO) {
+
+        OrderDTO orderDTO = (OrderDTO) servletContext.getAttribute("orderDTO");
 
         model.addAttribute("product", new ItemDTO());
         model.addAttribute("orderLines", Collections.emptyList());
@@ -84,8 +88,8 @@ public class OrdersController {
     @GetMapping("/private/sales/updateQuantity/{number}")
     public String updateOrderLinePrice(@PathVariable("number") Long number, Model model, OrderLineDTO lineDTO) {
 
-        OrderDTO order = (OrderDTO) servletContext.getAttribute("orderDTO");
-        Long orderNr = order.getOrderNumber();
+        OrderDTO orderDTO = (OrderDTO) servletContext.getAttribute("orderDTO");
+        Long orderNr = orderDTO.getOrderNumber();
 
         model.addAttribute("product", new ItemDTO());
         model.addAttribute("orderLines", Collections.emptyList());
@@ -121,7 +125,24 @@ public class OrdersController {
         return "orderForm";
     }
 
-    @GetMapping("/private/sales/pdf")
+    @GetMapping("/private/sales/finishOrder")
+    public String finishOrder() {
+        OrderDTO orderDTO = (OrderDTO) servletContext.getAttribute("orderDTO");
+
+        ordersService.saveOrder(orderDTO);
+
+        orderDTO.setStatus(OrderStatus.FINISHED);
+
+        servletContext.removeAttribute("orderDTO");
+        servletContext.setAttribute("orderDTO", orderDTO);
+
+        servletContext.removeAttribute("status");
+        servletContext.setAttribute("status", orderDTO.getStatus().toString());
+
+        return "redirect:/private/orderForm";
+    }
+
+    @GetMapping("/private/sales/printOrder")
     public void exportToPdf(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
         String currantDateTime = LocalDate.now().toString();
