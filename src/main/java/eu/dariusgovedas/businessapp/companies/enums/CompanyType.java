@@ -1,11 +1,11 @@
-package eu.dariusgovedas.businessapp.clients.enums;
+package eu.dariusgovedas.businessapp.companies.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ClientType {
+public enum CompanyType {
     CUSTOMER("CUSTOMER"),
     SUPPLIER("SUPPLIER"),
     OWNER("OWNER");

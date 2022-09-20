@@ -1,7 +1,7 @@
 package eu.dariusgovedas.businessapp.sales.controllers;
 
-import eu.dariusgovedas.businessapp.clients.entities.ClientDTO;
-import eu.dariusgovedas.businessapp.clients.service.ClientService;
+import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
+import eu.dariusgovedas.businessapp.companies.service.CompanyService;
 import eu.dariusgovedas.businessapp.common.PDFExporter;
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
 import eu.dariusgovedas.businessapp.sales.entities.InvoiceDTO;
@@ -32,13 +32,13 @@ import java.util.List;
 public class OrdersController {
 
     private ServletContext servletContext;
-    private ClientService clientService;
+    private CompanyService companyService;
     private OrdersService ordersService;
 
     @GetMapping("/private/sales/purchaseOrder")
     public String openPurchaseOrderForm(Model model) {
 
-        model.addAttribute("supplier", new ClientDTO());
+        model.addAttribute("supplier", new CompanyDTO());
         model.addAttribute("order", new OrderDTO());
         model.addAttribute("item", new ItemDTO());
         model.addAttribute("results", Collections.emptyList());
@@ -47,11 +47,11 @@ public class OrdersController {
     }
 
     @GetMapping("/private/sales/findSupplier")
-    public String getSupplier(Model model, Pageable pageable, ClientDTO clientDTO) {
+    public String getSupplier(Model model, Pageable pageable, CompanyDTO companyDTO) {
 
-        model.addAttribute("supplier", new ClientDTO());
+        model.addAttribute("supplier", new CompanyDTO());
 
-        model.addAttribute("results", clientService.searchForClient(pageable, clientDTO));
+        model.addAttribute("results", companyService.searchForCompany(pageable, companyDTO));
 
         return "purchaseForm";
     }

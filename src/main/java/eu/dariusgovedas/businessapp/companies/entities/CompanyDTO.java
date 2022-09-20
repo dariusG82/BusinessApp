@@ -1,16 +1,16 @@
-package eu.dariusgovedas.businessapp.clients.entities;
+package eu.dariusgovedas.businessapp.companies.entities;
 
-import eu.dariusgovedas.businessapp.clients.enums.ClientType;
+import eu.dariusgovedas.businessapp.companies.enums.CompanyType;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class ClientDTO {
+public class CompanyDTO {
 
-    private Long businessID;
-    private String businessName;
-    private ClientType clientType;
+    private Long companyID;
+    private String companyName;
+    private CompanyType companyType;
     private String country;
     private String city;
     private String street;

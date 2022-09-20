@@ -1,6 +1,6 @@
-package eu.dariusgovedas.businessapp.clients.entities;
+package eu.dariusgovedas.businessapp.companies.entities;
 
-import eu.dariusgovedas.businessapp.clients.enums.ClientType;
+import eu.dariusgovedas.businessapp.companies.enums.CompanyType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,15 +13,15 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client {
+public class Company {
 
     @Id
-    private Long businessID;
+    private Long companyID;
 
-    private String businessName;
+    private String companyName;
 
     @Enumerated(value = EnumType.STRING)
-    private ClientType clientType;
+    private CompanyType companyType;
 
     @OneToOne(cascade = CascadeType.ALL)
     private RegistrationAddress registrationAddress;

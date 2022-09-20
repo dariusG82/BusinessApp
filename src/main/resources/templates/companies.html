@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{companies.title}, ~{:: #main})">
+<div id="main">
+
+    <div class="container py-4">
+        <form method="get" th:object="${company}" th:action="@{/private/companies/findCompany}">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="inputClientID" class="col-sm-12 col-form-label" th:text="#{findClient.clientID}">Client
+                        ID</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputClientID" th:field="*{companyID}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputClient" class="col-sm-12 col-form-label"
+                           th:text="#{findCompany.business}">Business</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputClient" th:field="*{companyName}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputClientCountry" class="col-sm-12 col-form-label" th:text="#{findClient.country}">Country</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputClientCountry" th:field="*{country}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="inputClientCity" class="col-sm-12 col-form-label"
+                           th:text="#{findCompany.city}">City</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputClientCity" th:field="*{city}">
+                    </div>
+                </div>
+
+            </div>
+            <button type="submit" class="btn btn-custom" th:text="#{button.findCompany}">Find Client</button>
+        </form>
+    </div>
+    <div th:if="${companies.empty}" class="container d-md-flex justify-content-md-center page-block">
+        <h1 th:text="#{companies.notFound}">No companies found</h1>
+    </div>
+    <table th:if="${not companies.empty}" class="table align-middle background-light page-block">
+        <thead>
+        <tr>
+            <th th:text="#{company.type}">Company Type</th>
+            <th th:text="#{company.clientID}">Business ID</th>
+            <th th:text="#{company.business}">Business name</th>
+            <th th:text="#{company.country}">Country</th>
+            <th th:text="#{company.city}">City</th>
+            <th th:text="#{company.streetAddress}">StreetAddress</th>
+            <th th:text="#{company.phone}">Phone</th>
+            <th th:text="#{company.email}">Email</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="company : ${companies}">
+            <td th:text="${company.companyType}">Type</td>
+            <td th:text="${company.companyID}">ID</td>
+            <td th:text="${company.companyName}">Name</td>
+            <td th:text="${company.country}">Country</td>
+            <td th:text="${company.city}">City</td>
+            <td th:text="${company.streetAddress}">Street Address</td>
+            <td th:text="${company.phoneNumber}">Phone</td>
+            <td th:text="${company.emailAddress}">Email</td>
+            <td>
+                <form th:action="@{/private/companies/edit/{id}(id=${company.companyID})}" method="get">
+                    <button id="editClient" class="edit-delete-update">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

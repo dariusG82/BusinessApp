@@ -1,28 +1,28 @@
-package eu.dariusgovedas.businessapp.clients.enums;
+package eu.dariusgovedas.businessapp.companies.enums;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.stream.Stream;
 
 @Converter(autoApply = true)
-public class ClientTypeConverter implements AttributeConverter<ClientType, String> {
+public class CompanyTypeConverter implements AttributeConverter<CompanyType, String> {
 
     @Override
-    public String convertToDatabaseColumn(ClientType clientType) {
-        if(clientType == null){
+    public String convertToDatabaseColumn(CompanyType companyType) {
+        if(companyType == null){
             return null;
         }
 
-        return clientType.getValue();
+        return companyType.getValue();
     }
 
     @Override
-    public ClientType convertToEntityAttribute(String dbData) {
+    public CompanyType convertToEntityAttribute(String dbData) {
         if(dbData == null){
             return null;
         }
 
-        return Stream.of(ClientType.values())
+        return Stream.of(CompanyType.values())
                 .filter(clientType -> clientType.getValue().equals(dbData))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

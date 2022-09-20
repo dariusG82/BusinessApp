@@ -1,6 +1,6 @@
 package eu.dariusgovedas.businessapp.sales.entities;
 
-import eu.dariusgovedas.businessapp.clients.entities.ClientDTO;
+import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class InvoiceDTO {
 
-    private ClientDTO customer;
-    private ClientDTO supplier;
+    private CompanyDTO customer;
+    private CompanyDTO supplier;
     private OrderDTO order;
     private List<OrderLineDTO> orderLines;
 

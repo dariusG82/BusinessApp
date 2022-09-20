@@ -1,8 +1,8 @@
 package eu.dariusgovedas.businessapp.sales.services;
 
-import eu.dariusgovedas.businessapp.clients.entities.Client;
-import eu.dariusgovedas.businessapp.clients.entities.ClientDTO;
-import eu.dariusgovedas.businessapp.clients.service.ClientService;
+import eu.dariusgovedas.businessapp.companies.entities.Company;
+import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
+import eu.dariusgovedas.businessapp.companies.service.CompanyService;
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
 import eu.dariusgovedas.businessapp.items.service.ItemService;
 import eu.dariusgovedas.businessapp.sales.entities.*;
@@ -28,7 +28,7 @@ public class OrdersService {
     private OrdersRepository ordersRepository;
     private OrderLineRepository orderLineRepository;
 
-    private ClientService clientService;
+    private CompanyService companyService;
     private ItemService itemService;
 
     public OrderDTO createNewOrder(Long id, OrderType orderType) {
@@ -57,19 +57,19 @@ public class OrdersService {
     @Transactional
     Order createOrder(Long id, OrderType type){
         Order order = new Order();
-        Client client = clientService.getClientById(id);
-        Client userBusiness = clientService.getBusinessOwner();
+        Company company = companyService.getCompanyById(id);
+        Company userBusiness = companyService.getBusinessOwner();
         Long orderNr = ordersRepository.count() + 1;
 
         order.setId(orderNr);
         order.setOrderType(type);
         order.setOrderDate(LocalDate.now());
         if(type.equals(OrderType.PURCHASE)){
-            order.setClientName(userBusiness.getBusinessName());
-            order.setSupplierName(client.getBusinessName());
+            order.setClientName(userBusiness.getCompanyName());
+            order.setSupplierName(company.getCompanyName());
         } else {
-            order.setClientName(client.getBusinessName());
-            order.setSupplierName(userBusiness.getBusinessName());
+            order.setClientName(company.getCompanyName());
+            order.setSupplierName(userBusiness.getCompanyName());
         }
         order.setStatus(OrderStatus.OPEN);
         order.setOrderAmount(BigDecimal.ZERO);
@@ -164,8 +164,8 @@ public class OrdersService {
 
     public InvoiceDTO getInvoiceDTO(OrderDTO orderDTO) {
         InvoiceDTO invoiceDTO = new InvoiceDTO();
-        ClientDTO clientDTO = clientService.getClientDTOByName(orderDTO.getClient());
-        ClientDTO supplierDTO = clientService.getClientDTOByName(orderDTO.getSupplier());
+        CompanyDTO companyDTO = companyService.getClientDTOByName(orderDTO.getClient());
+        CompanyDTO supplierDTO = companyService.getClientDTOByName(orderDTO.getSupplier());
 
         List<OrderLine> orderLines = orderLineRepository.findOrderLines(orderDTO.getOrderNumber());
         List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
@@ -175,7 +175,7 @@ public class OrdersService {
             }
         }
 
-        invoiceDTO.setCustomer(clientDTO);
+        invoiceDTO.setCustomer(companyDTO);
         invoiceDTO.setSupplier(supplierDTO);
         invoiceDTO.setOrder(orderDTO);
         invoiceDTO.setOrderLines(orderLineDTOS);

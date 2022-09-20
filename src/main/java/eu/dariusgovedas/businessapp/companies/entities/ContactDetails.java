@@ -1,4 +1,4 @@
-package eu.dariusgovedas.businessapp.clients.entities;
+package eu.dariusgovedas.businessapp.companies.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,22 +15,16 @@ import javax.persistence.OneToOne;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegistrationAddress {
+public class ContactDetails {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    private String country;
+    private String phoneNumber;
 
-    private String city;
+    private String emailAddress;
 
-    private String street;
-
-    private String houseNumber;
-
-    private String flatNumber;
-
-    @OneToOne(mappedBy = "registrationAddress")
-    private Client client;
+    @OneToOne(mappedBy = "contactDetails")
+    private Company company;
 }

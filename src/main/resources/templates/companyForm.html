@@ -1,57 +1,63 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="fragments/layout :: layout(#{clientForm.title}, ~{:: #main})">
+      th:replace="fragments/layout :: layout(#{companyForm.title}, ~{:: #main})">
 <div id="main">
 
     <div class="container py-4">
-        <form method="post" th:object="${client}" th:action="@{''}">
+        <form method="post" th:object="${company}" th:action="@{''}">
             <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="inputClientID" class="col-sm-12 col-form-label" th:text="#{client.clientID}">Client ID</label>
+                <div th:if="${company.companyID eq null}" class="col-md-4">
+                    <label for="inputClientID" class="col-sm-12 col-form-label" th:text="#{company.clientID}">Client ID</label>
                     <div class="col-sm-12">
-                        <input type="text" class="form-control" id="inputClientID" th:field="*{businessID}">
+                        <input type="text" class="form-control" id="inputClientID" th:field="*{companyID}">
+                    </div>
+                </div>
+                <div th:if="${not (company.companyID eq null)}" class="col-md-4">
+                    <label for="inputClientID" class="col-sm-12 col-form-label" th:text="#{company.clientID}">Client ID</label>
+                    <div class="col-sm-12">
+                        <p th:text="${company.companyID}">
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="inputClient" class="col-sm-12 col-form-label" th:text="#{client.business}">Business</label>
+                    <label for="inputClient" class="col-sm-12 col-form-label" th:text="#{company.business}">Business</label>
                     <div class="col-sm-12">
-                        <input type="text" class="form-control" id="inputClient" th:field="*{businessName}">
+                        <input type="text" class="form-control" id="inputClient" th:field="*{companyName}">
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <label for="inputClientType" class="col-sm-12 col-form-label" th:text="#{client.type}">Business</label>
+                    <label for="inputClientType" class="col-sm-12 col-form-label" th:text="#{company.type}">Business</label>
                     <div class="col-sm-12">
-                        <select class="form-control" id="inputClientType" th:field="*{clientType}">
-                            <option th:each="option : ${clientTypeOptions}" th:value="${option}" th:text="${option}"></option>
+                        <select class="form-control" id="inputClientType" th:field="*{companyType}">
+                            <option th:each="option : ${companyTypeOptions}" th:value="${option}" th:text="${option}"></option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputClientCountry" class="col-sm-2 col-form-label" th:text="#{client.country}">Country</label>
+                    <label for="inputClientCountry" class="col-sm-2 col-form-label" th:text="#{company.country}">Country</label>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="inputClientCountry" th:field="*{country}">
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputClientCity" class="col-sm-2 col-form-label" th:text="#{client.city}">City</label>
+                    <label for="inputClientCity" class="col-sm-2 col-form-label" th:text="#{company.city}">City</label>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="inputClientCity" th:field="*{city}">
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <label for="inputClientStreet" class="col-sm-2 col-form-label" th:text="#{client.street}">City</label>
+                    <label for="inputClientStreet" class="col-sm-2 col-form-label" th:text="#{company.street}">City</label>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="inputClientStreet" th:field="*{street}">
                     </div>
                 </div>
                 <div class="col md-1">
-                    <label for="inputClientHouse" class="col-sm-2 col-form-label" th:text="#{client.house}">House Nr</label>
+                    <label for="inputClientHouse" class="col-sm-2 col-form-label" th:text="#{company.house}">House Nr</label>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="inputClientHouse" th:field="*{houseNumber}">
                     </div>
                 </div>
                 <div class="col md-1">
-                    <label for="inputClientFlat" class="col-sm-2 col-form-label" th:text="#{client.flat}">Flat Nr</label>
+                    <label for="inputClientFlat" class="col-sm-2 col-form-label" th:text="#{company.flat}">Flat Nr</label>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="inputClientFlat" th:field="*{flatNumber}">
                     </div>
@@ -59,13 +65,13 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="inputClientPhone" class="col-sm-6 col-form-label" th:text="#{client.phone}">Phone Nr</label>
+                    <label for="inputClientPhone" class="col-sm-6 col-form-label" th:text="#{company.phone}">Phone Nr</label>
                     <div class="col-sm-12">
                         <input type="text" class="form-control" id="inputClientPhone" th:field="*{phoneNumber}">
                     </div>
                 </div>
                 <div class="col md-6">
-                    <label for="inputClientEmail" class="col-sm-6 col-form-label" th:text="#{client.email}">Email</label>
+                    <label for="inputClientEmail" class="col-sm-6 col-form-label" th:text="#{company.email}">Email</label>
                     <div class="col-sm-12">
                         <input type="email" class="form-control" id="inputClientEmail" th:field="*{emailAddress}">
                     </div>
@@ -74,7 +80,6 @@
 
             <button type="submit" class="btn btn-custom">Save item</button>
         </form>
-
     </div>
 
 </div>

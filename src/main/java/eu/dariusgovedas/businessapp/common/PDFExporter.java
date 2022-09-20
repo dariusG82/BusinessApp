@@ -1,13 +1,12 @@
 package eu.dariusgovedas.businessapp.common;
 
-import com.lowagie.text.*;
 import com.lowagie.text.Font;
+import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import eu.dariusgovedas.businessapp.clients.entities.ClientDTO;
+import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
 import eu.dariusgovedas.businessapp.sales.entities.InvoiceDTO;
-import eu.dariusgovedas.businessapp.sales.entities.OrderDTO;
 import eu.dariusgovedas.businessapp.sales.entities.OrderLineDTO;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,15 +16,13 @@ import java.util.List;
 
 public class PDFExporter {
 
-    private final ClientDTO clientDTO;
-    private final ClientDTO supplierDTO;
-    private final OrderDTO orderDTO;
+    private final CompanyDTO companyDTO;
+    private final CompanyDTO supplierDTO;
     private final List<OrderLineDTO> orderLineDTOS;
 
     public PDFExporter(InvoiceDTO invoiceDTO){
-        this.clientDTO = invoiceDTO.getCustomer();
+        this.companyDTO = invoiceDTO.getCustomer();
         this.supplierDTO = invoiceDTO.getSupplier();
-        this.orderDTO = invoiceDTO.getOrder();
         this.orderLineDTOS = invoiceDTO.getOrderLines();
 
     }
@@ -42,7 +39,7 @@ public class PDFExporter {
         cell.setPhrase(new Phrase("Supplier", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Client", font));
+        cell.setPhrase(new Phrase("Company", font));
         table.addCell(cell);
     }
 
@@ -50,14 +47,14 @@ public class PDFExporter {
         PdfPCell cell = table.getDefaultCell();
         cell.setBorder(0);
 
-        table.addCell(supplierDTO.getBusinessName());
-        table.addCell(clientDTO.getBusinessName());
-        table.addCell(supplierDTO.getBusinessID().toString());
-        table.addCell(clientDTO.getBusinessID().toString());
+        table.addCell(supplierDTO.getCompanyName());
+        table.addCell(companyDTO.getCompanyName());
+        table.addCell(supplierDTO.getCompanyID().toString());
+        table.addCell(companyDTO.getCompanyID().toString());
         table.addCell(supplierDTO.getCountry() + ", " + supplierDTO.getCity());
-        table.addCell(clientDTO.getCountry() + ", " + clientDTO.getCity());
+        table.addCell(companyDTO.getCountry() + ", " + companyDTO.getCity());
         table.addCell(supplierDTO.getStreetAddress());
-        table.addCell(clientDTO.getStreetAddress());
+        table.addCell(companyDTO.getStreetAddress());
     }
 
     private void writeOrderLinesTableHeader(PdfPTable table){
