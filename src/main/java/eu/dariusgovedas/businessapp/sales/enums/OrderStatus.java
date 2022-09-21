@@ -5,7 +5,7 @@ import lombok.Getter;
 
 /*
     OPEN - Order is processing
-    FINISHED - Order is finalized, invoice is printed
+    INVOICED - Order is finalized, invoice is printed
     CONFIRMED - Orders payment is confirmed
     CANCELED - Order is canceled before Payment Received
     CREDITED - Order is canceled after Payment Received, Credit Invoice created
@@ -15,7 +15,7 @@ import lombok.Getter;
 public enum OrderStatus {
 
     OPEN("OPEN"),
-    FINISHED("FINISHED"),
+    INVOICED("INVOICED"),
     CONFIRMED("CONFIRMED"),
     CANCELED("CANCELED"),
     CREDITED("CREDITED");

@@ -129,9 +129,9 @@ public class OrdersController {
     public String finishOrder() {
         OrderDTO orderDTO = (OrderDTO) servletContext.getAttribute("orderDTO");
 
-        ordersService.saveOrder(orderDTO);
+        ordersService.saveInvoicedOrder(orderDTO);
 
-        orderDTO.setStatus(OrderStatus.FINISHED);
+        orderDTO.setStatus(OrderStatus.INVOICED);
 
         servletContext.removeAttribute("orderDTO");
         servletContext.setAttribute("orderDTO", orderDTO);

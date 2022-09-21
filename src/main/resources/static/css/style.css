@@ -40,7 +40,7 @@ main {
     min-height: 100%;
 }
 
-.col-order-form{
+.col-order-form {
     border: black solid 1px;
     margin-top: 1vh;
 }
@@ -56,6 +56,10 @@ main {
 .text-dark {
     color: var(--dark);
     text-decoration: underline;
+}
+
+.font-dark {
+    color: var(--dark);
 }
 
 #flexRadioDefault1, #flexRadioDefault2 {
@@ -114,6 +118,10 @@ footer {
     transform: translate(-50%, -50%);
 }
 
-.order-pricing{
+.order-pricing {
     text-align: right;
+}
+
+tr > td {
+    text-align: center;
 }

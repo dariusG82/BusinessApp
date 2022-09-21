@@ -12,6 +12,9 @@ import eu.dariusgovedas.businessapp.sales.repositories.OrderLineRepository;
 import eu.dariusgovedas.businessapp.sales.repositories.OrdersRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -184,8 +187,31 @@ public class OrdersService {
     }
 
     @Transactional
-    public void saveOrder(OrderDTO orderDTO) {
+    public void saveInvoicedOrder(OrderDTO orderDTO) {
         Order order = ordersRepository.findByIdAndOrderType(orderDTO.getOrderNumber(), orderDTO.getOrderType());
-        order.setStatus(OrderStatus.FINISHED);
+        order.setStatus(OrderStatus.INVOICED);
+    }
+
+    public Page<OrderDTO> getOpenOrdersDTOs(Pageable pageable) {
+        List<Order> orders = ordersRepository.findByStatus(OrderStatus.INVOICED);
+        List<OrderDTO> orderDTOS = getOrderDTOS(orders);
+
+        return new PageImpl<>(orderDTOS, pageable, orderDTOS.size());
+    }
+
+    private List<OrderDTO> getOrderDTOS(List<Order> orders) {
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+
+        if(orders != null){
+            for (Order order : orders){
+                orderDTOS.add(getOrderDTOFromOrder(order));
+            }
+        }
+
+        return orderDTOS;
+    }
+
+    public Order getOrderByID(Long orderID) {
+        return ordersRepository.findById(orderID).orElseThrow(IllegalArgumentException::new);
     }
 }
