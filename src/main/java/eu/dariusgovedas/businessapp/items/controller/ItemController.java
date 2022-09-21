@@ -30,7 +30,7 @@ public class ItemController {
         List<String> options = itemPropertiesService.getCategories();
         model.addAttribute("options", options);
 
-        return "itemForm";
+        return "warehouse/itemForm";
     }
 
     @PostMapping("/private/item/create")
@@ -47,6 +47,6 @@ public class ItemController {
         Page<ItemDTO> warehouseStock = itemService.getWarehouseStock(pageable);
         model.addAttribute("items", warehouseStock);
 
-        return "warehouseStock";
+        return "warehouse/warehouseStock";
     }
 }

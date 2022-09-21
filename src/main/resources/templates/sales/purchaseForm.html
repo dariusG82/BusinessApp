@@ -10,14 +10,14 @@
                     <label for="inputClientID" class="col-sm-12 col-form-label"
                            th:text="#{findSupplier.supplierID}">Client ID</label>
                     <div class="col-sm-12">
-                        <input type="text" class="form-control" id="inputClientID" th:field="*{getCompanyID}">
+                        <input type="text" class="form-control" id="inputClientID" th:field="*{companyID}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="inputClient" class="col-sm-12 col-form-label"
                            th:text="#{findSupplier.name}">Supplier Name</label>
                     <div class="col-sm-12">
-                        <input type="text" class="form-control" id="inputClient" th:field="*{getCompanyName}">
+                        <input type="text" class="form-control" id="inputClient" th:field="*{companyName}">
                     </div>
                 </div>
             </div>
@@ -40,13 +40,13 @@
         </thead>
         <tbody>
         <tr th:each="partner : ${results}">
-            <td th:text="${partner.getCompanyID}">Business ID</td>
-            <td th:text="${partner.getCompanyName}">Business Name</td>
+            <td th:text="${partner.companyID}">Business ID</td>
+            <td th:text="${partner.companyName}">Business Name</td>
             <td th:text="${partner.country}">Country</td>
             <td th:text="${partner.city}">City</td>
             <td th:text="${partner.streetAddress}">Street Address</td>
             <td>
-                <form th:action="@{/private/sales/createPO/{id}(id=${partner.getCompanyID})}" method="get">
+                <form th:action="@{/private/sales/createPO/{id}(id=${partner.companyID})}" method="get">
                     <button id="createOrder" class="edit-delete-update">
                         <i class="fa-regular fa-square"></i>
                     </button>

@@ -24,7 +24,7 @@ public class CompanyController {
 
         model.addAttribute("company", new CompanyDTO());
         model.addAttribute("companyTypeOptions", companyPropertiesService.getCompanyTypes());
-        return "companyForm";
+        return "companies/companyForm";
     }
 
     @PostMapping("/private/companies/createCompany")
@@ -44,7 +44,7 @@ public class CompanyController {
 
         model.addAttribute("companies",companyDTOS );
 
-        return "companies";
+        return "companies/companies";
     }
 
     @GetMapping("/private/companies/findCompany")
@@ -54,7 +54,7 @@ public class CompanyController {
 
         model.addAttribute("companies", companyService.searchForCompany(pageable, companyDTO));
 
-        return "companies";
+        return "companies/companies";
     }
 
     @GetMapping("/private/companies/edit/{id}")
@@ -63,7 +63,7 @@ public class CompanyController {
         model.addAttribute("company", companyService.getCompanyDTOById(id));
         model.addAttribute("companyTypeOptions", companyPropertiesService.getCompanyTypes());
 
-        return "companyForm";
+        return "companies/companyForm";
     }
 
     @PostMapping("/private/companies/edit/{id}")

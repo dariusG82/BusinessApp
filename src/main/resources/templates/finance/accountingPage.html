@@ -14,6 +14,19 @@
 
         <div class="row mb-2">
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <form th:action="@{/private/finance/showOpenOrders}" method="get">
+                    <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <h4 th:text="#{accountingPage.showOpenOrders}">Balance</h4>
+                            <p class="card-text mb-auto" th:text="#{accountingPage.showOpenOrdersText}">Content</p>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
                     <div class="col p-4 d-flex flex-column position-static">
                         <h4 th:text="#{accountingPage.balance}">Balance</h4>

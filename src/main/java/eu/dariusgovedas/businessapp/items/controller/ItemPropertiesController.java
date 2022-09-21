@@ -21,7 +21,7 @@ public class ItemPropertiesController {
 
         model.addAttribute("itemData", new ItemPropertiesDTO());
 
-        return "editItemData";
+        return "admin/editItemData";
     }
 
     @PostMapping("/private/editItemData/saveCategory")

@@ -43,7 +43,7 @@ public class OrdersController {
         model.addAttribute("item", new ItemDTO());
         model.addAttribute("results", Collections.emptyList());
 
-        return "purchaseForm";
+        return "sales/purchaseForm";
     }
 
     @GetMapping("/private/sales/findSupplier")
@@ -53,7 +53,7 @@ public class OrdersController {
 
         model.addAttribute("results", companyService.searchForCompany(pageable, companyDTO));
 
-        return "purchaseForm";
+        return "sales/purchaseForm";
     }
 
     @GetMapping("/private/sales/createPO/{id}")
@@ -69,7 +69,7 @@ public class OrdersController {
         servletContext.setAttribute("orderDTO", orderDTO);
         servletContext.setAttribute("status", orderDTO.getStatus().toString());
 
-        return "orderForm";
+        return "sales/orderForm";
     }
 
 
@@ -82,7 +82,7 @@ public class OrdersController {
         model.addAttribute("orderLines", Collections.emptyList());
         model.addAttribute("result", ordersService.getNewOrderLine(itemDTO.getItemNumber(), orderDTO));
 
-        return "orderForm";
+        return "sales/orderForm";
     }
 
     @GetMapping("/private/sales/updateQuantity/{number}")
@@ -95,7 +95,7 @@ public class OrdersController {
         model.addAttribute("orderLines", Collections.emptyList());
         model.addAttribute("result", ordersService.updateOrderLine(orderNr, number, lineDTO));
 
-        return "orderForm";
+        return "sales/orderForm";
     }
 
     @PostMapping("/private/sales/saveOrderLine/{number}/{quantity}")
@@ -122,7 +122,7 @@ public class OrdersController {
 
         model.addAttribute("orderLines", orderLineList);
 
-        return "orderForm";
+        return "sales/orderForm";
     }
 
     @GetMapping("/private/sales/finishOrder")

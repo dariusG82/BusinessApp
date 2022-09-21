@@ -19,7 +19,7 @@ public class AccountingDataController {
 
         model.addAttribute("bankData", new BankDTO());
 
-        return "editAccountingData";
+        return "admin/editAccountingData";
     }
 
     @PostMapping("/private/addBankData")

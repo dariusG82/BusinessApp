@@ -17,30 +17,30 @@ public class NavigationController {
     @GetMapping("/private/admin")
     public String openAdminPage(){
 
-        return "adminPage";
+        return "admin/adminPage";
     }
 
     @GetMapping("/private/accounting")
     public String openAccountingPage(){
 
-        return "accountingPage";
+        return "finance/accountingPage";
     }
 
     @GetMapping("/private/companies")
     public String openClientsPage(){
 
-        return "companiesPage";
+        return "companies/companiesPage";
     }
 
     @GetMapping("/private/sales")
     public String openSalesPage(){
 
-        return "salesmanPage";
+        return "sales/salesmanPage";
     }
 
     @GetMapping("/private/warehouse")
     public String openWarehousePage(){
 
-        return "warehousePage";
+        return "warehouse/warehousePage";
     }
 }
