@@ -1,4 +1,4 @@
-package eu.dariusgovedas.businessapp.navigation.controllers;
+package eu.dariusgovedas.businessapp.common;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,5 +42,11 @@ public class NavigationController {
     public String openWarehousePage(){
 
         return "warehouse/warehousePage";
+    }
+
+    @GetMapping("/private/testData")
+    public String openTestDataPage(){
+
+        return "testData/testDataPage";
     }
 }

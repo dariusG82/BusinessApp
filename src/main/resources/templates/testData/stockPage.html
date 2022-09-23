@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{testData.stockPage.title}, ~{:: #main})">
+<div id="main">
+  <div th:if="${stockList.empty}" class="container d-md-flex justify-content-md-center page-block">
+    <h1 th:text="#{testData.supplies.notFound}">No companies found</h1>
+  </div>
+  <table th:if="${not stockList.empty}" class="table align-middle background-light page-block">
+    <thead>
+    <tr>
+      <th th:text="#{item.itemNumber}">Item Number</th>
+      <th th:text="#{item.itemName}">Item Name</th>
+      <th th:text="#{item.itemDescription}">Description</th>
+      <th th:text="#{item.salePrice}">Price</th>
+      <th th:text="#{item.quantity}">StreetAddress</th>
+      <th th:text="#{testData.supplier.editStock}">Edit Stock</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="listItem : ${stockList}">
+      <td th:text="${listItem.itemID}">ID</td>
+      <td th:text="${listItem.itemName}">Name</td>
+      <td th:text="${listItem.itemDescription}">Description</td>
+      <td th:text="${listItem.price}">Price</td>
+      <td th:text="${listItem.quantity}">Quantity</td>
+      <td>
+        <form th:action="@{/private/testData/editStock/{id}(id=${supplierID})}" method="get">
+          <button id="editStock" class="edit-delete-update">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <form th:action="@{/private/testData/addSupplies/{id}(id=${supplierID})}" method="get">
+    <button id="addStockItem" class="edit-delete-update">
+      <i class="fa-solid fa-pen-to-square"></i>
+    </button>
+  </form>
+</div>
+</html>

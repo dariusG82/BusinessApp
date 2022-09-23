@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{testData.title}, ~{:: #main})">
+<div id="main">
+    <div class="container py-4">
+        <form method="post" th:object="${supplierItem}" th:action="@{/private/testData/{id}/addSupplierItem(id=${supplierID})}">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="inputItemName" class="col-sm-12 col-form-label" th:text="#{item.itemName}">Item name</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputItemName" th:field="*{name}">
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <label for="inputDescription" class="col-sm-12 col-form-label"
+                           th:text="#{item.itemDescription}">Description</label>
+                    <textarea class="col-sm-12 form-control" id="inputDescription" th:field="*{description}">
+                    </textarea>
+                </div>
+                <div class="row mb-4">
+                    <label for="inputCategory" class="col-sm-12 col-form-label" th:text="#{item.category}">Item Name</label>
+                    <div class="col-sm-12">
+                        <select class="form-control" id="inputCategory" th:field="*{category}">
+                            <option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="inputPrice" class="col-sm-12 col-form-label" th:text="#{item.salePrice}">Item name</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputPrice" th:field="*{salePrice}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="inputQuantity" class="col-sm-12 col-form-label" th:text="#{item.quantity}">Item name</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" id="inputQuantity" th:field="*{stockQuantity}">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-custom" th:text="#{button.addSupplierItem}">Add supplier item</button>
+        </form>
+    </div>
+</div>
+</html>

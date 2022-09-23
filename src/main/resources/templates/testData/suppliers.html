@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{testData.suppliers.title}, ~{:: #main})">
+<div id="main">
+  <div class="container py-4">
+    <form method="get" th:object="${supplier}" th:action="@{/private/testData/findSupplier}">
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="inputClientID" class="col-sm-12 col-form-label" th:text="#{findClient.clientID}">Client
+            ID</label>
+          <div class="col-sm-12">
+            <input type="text" class="form-control" id="inputClientID" th:field="*{companyID}">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="inputClient" class="col-sm-12 col-form-label"
+                 th:text="#{findCompany.business}">Business</label>
+          <div class="col-sm-12">
+            <input type="text" class="form-control" id="inputClient" th:field="*{companyName}">
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-custom" th:text="#{button.findCompany}">Find Client</button>
+    </form>
+  </div>
+  <div th:if="${suppliersList.empty}" class="container d-md-flex justify-content-md-center page-block">
+    <h1 th:text="#{testData.suppliers.notFound}">No companies found</h1>
+  </div>
+  <table th:if="${not suppliersList.empty}" class="table align-middle background-light page-block">
+    <thead>
+    <tr>
+      <th th:text="#{company.business}">Company Name</th>
+      <th th:text="#{company.clientID}">Company ID</th>
+      <th th:text="#{company.country}">Country</th>
+      <th th:text="#{company.city}">City</th>
+      <th th:text="#{company.streetAddress}">StreetAddress</th>
+      <th th:text="#{testData.supplier.editStock}">Edit Stock</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="company : ${suppliersList}">
+      <td th:text="${company.companyID}">ID</td>
+      <td th:text="${company.companyName}">Name</td>
+      <td th:text="${company.country}">Country</td>
+      <td th:text="${company.city}">City</td>
+      <td th:text="${company.streetAddress}">Street Address</td>
+      <td>
+        <form th:action="@{/private/testData/editStock/{id}(id=${company.companyID})}" method="get">
+          <button id="editClient" class="edit-delete-update">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</html>

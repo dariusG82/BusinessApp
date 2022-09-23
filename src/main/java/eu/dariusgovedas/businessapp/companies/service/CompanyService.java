@@ -1,5 +1,7 @@
 package eu.dariusgovedas.businessapp.companies.service;
 
+import eu.dariusgovedas.businessapp.common.supplier.entities.SupplierWarehouse;
+import eu.dariusgovedas.businessapp.common.supplier.repositories.SupplierWarehouseRepository;
 import eu.dariusgovedas.businessapp.companies.entities.Company;
 import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
 import eu.dariusgovedas.businessapp.companies.entities.ContactDetails;
@@ -20,13 +22,18 @@ import java.util.List;
 @AllArgsConstructor
 public class CompanyService {
 
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
+    private final SupplierWarehouseRepository supplierWarehouseRepository;
 
     @Transactional
     public void saveCompanyData(CompanyDTO companyDTO) {
         Company company = getClientFromClientDTO(companyDTO);
 
         companyRepository.save(company);
+
+        if(company.getCompanyType().equals(CompanyType.SUPPLIER)){
+            saveNewSupplier(company);
+        }
     }
 
     private RegistrationAddress getRegistrationAddress(CompanyDTO companyDTO) {
@@ -100,46 +107,91 @@ public class CompanyService {
     public Page<CompanyDTO> searchForCompany(Pageable pageable, CompanyDTO companyDTO) {
         List<CompanyDTO> companyDTOS = new ArrayList<>();
 
-        if (companyDTO.getCompanyID() != null) {
-            Company company = companyRepository.findByCompanyID(companyDTO.getCompanyID());
-            if(company == null){
-                return new PageImpl<>(companyDTOS, pageable, 0);
-            }
-            if (checkCompanyName(company, companyDTO) && checkCountry(company, companyDTO) && checkCity(company, companyDTO)) {
+        if(companyDTO.getCompanyType() == CompanyType.SUPPLIER
+                && companyDTO.getCompanyID() == null
+                && companyDTO.getCompanyType() == null){
+            List<Company> companies = companyRepository.findByCompanyType(companyDTO.getCompanyType());
+            for(Company company : companies){
                 companyDTOS.add(getClientDTOFromClient(company));
-                return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
             }
+            return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
+        }
+
+        if (companyDTO.getCompanyID() != null) {
+            return findCompanyDTOsByID(companyDTO, pageable);
         }
 
         if (companyDTO.getCompanyName() != null) {
-            List<Company> companies = companyRepository.findByCompanyNameContainingIgnoreCase(companyDTO.getCompanyName());
-            for (Company company : companies) {
-                if (checkCountry(company, companyDTO) && checkCity(company, companyDTO)) {
-                    companyDTOS.add(getClientDTOFromClient(company));
-                }
-            }
-            return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
+            return findCompanyDTOsByName(companyDTO, pageable);
         }
 
         if (companyDTO.getCountry() != null) {
-            List<Company> companies = companyRepository.findByCountry(companyDTO.getCountry().toUpperCase());
-            for (Company company : companies) {
-                if (checkCity(company, companyDTO)) {
-                    companyDTOS.add(getClientDTOFromClient(company));
-                }
-            }
-            return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
+            return findCompanyDTOsByCountry(companyDTO, pageable);
         }
 
         if (companyDTO.getCity() != null) {
-            List<Company> companies = companyRepository.findByCity(companyDTO.getCity().toUpperCase());
-            for (Company company : companies) {
-                companyDTOS.add(getClientDTOFromClient(company));
-            }
-            return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
+            return findCompanyDTOsByCity(companyDTO, pageable);
         }
 
         return new PageImpl<>(companyDTOS, pageable, 0);
+    }
+
+    private Page<CompanyDTO> findCompanyDTOsByID(CompanyDTO companyDTO, Pageable pageable) {
+        List<CompanyDTO> companyDTOS = new ArrayList<>();
+        Company company = companyRepository.findByCompanyID(companyDTO.getCompanyID());
+        if(company == null){
+            return new PageImpl<>(companyDTOS, pageable, 0);
+        }
+        if (checkCompanyName(company, companyDTO)
+                && checkCompanyType(company, companyDTO)
+                && checkCountry(company, companyDTO)
+                && checkCity(company, companyDTO)) {
+            companyDTOS.add(getClientDTOFromClient(company));
+            return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
+        }
+        return new PageImpl<>(companyDTOS, pageable, 0);
+    }
+
+    private Page<CompanyDTO> findCompanyDTOsByName(CompanyDTO companyDTO, Pageable pageable) {
+        List<CompanyDTO> companyDTOS = new ArrayList<>();
+
+        List<Company> companies = companyRepository.findByCompanyNameContainingIgnoreCase(companyDTO.getCompanyName());
+        for (Company company : companies) {
+            if (checkCompanyType(company, companyDTO) && checkCountry(company, companyDTO) && checkCity(company, companyDTO)) {
+                companyDTOS.add(getClientDTOFromClient(company));
+            }
+        }
+        return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
+    }
+
+    private Page<CompanyDTO> findCompanyDTOsByCountry(CompanyDTO companyDTO, Pageable pageable) {
+        List<CompanyDTO> companyDTOS = new ArrayList<>();
+
+        List<Company> companies = companyRepository.findByCountry(companyDTO.getCountry().toUpperCase());
+        for (Company company : companies) {
+            if (checkCity(company, companyDTO)) {
+                companyDTOS.add(getClientDTOFromClient(company));
+            }
+        }
+        return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
+    }
+
+    private Page<CompanyDTO> findCompanyDTOsByCity(CompanyDTO companyDTO, Pageable pageable) {
+        List<CompanyDTO> companyDTOS = new ArrayList<>();
+
+        List<Company> companies = companyRepository.findByCity(companyDTO.getCity().toUpperCase());
+        for (Company company : companies) {
+            companyDTOS.add(getClientDTOFromClient(company));
+        }
+        return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
+    }
+
+    private boolean checkCompanyType(Company company, CompanyDTO companyDTO){
+        if(companyDTO.getCompanyType() == null){
+            return true;
+        } else {
+            return company.getCompanyType().equals(companyDTO.getCompanyType());
+        }
     }
 
     private boolean checkCompanyName(Company company, CompanyDTO companyDTO) {
@@ -197,5 +249,23 @@ public class CompanyService {
     public CompanyDTO getClientDTOByName(String clientName) {
         Company company = companyRepository.findByCompanyName(clientName);
         return getClientDTOFromClient(company);
+    }
+
+    @Transactional
+    public void saveNewSupplier(Company company) {
+        SupplierWarehouse supplierWarehouse = new SupplierWarehouse();
+        supplierWarehouse.setWarehouseID(supplierWarehouseRepository.count() + 1);
+        supplierWarehouse.setSupplierName(company.getCompanyName());
+        supplierWarehouse.setSupplierItemList(new ArrayList<>());
+
+        supplierWarehouseRepository.save(supplierWarehouse);
+    }
+
+    public Page<CompanyDTO> getSuppliers(Pageable pageable) {
+        List<Company> companies = companyRepository.findByCompanyType(CompanyType.SUPPLIER);
+
+        List<CompanyDTO> companyDTOS = getCompanyDTOsFromCompanyList(companies);
+
+        return new PageImpl<>(companyDTOS, pageable, companyDTOS.size());
     }
 }

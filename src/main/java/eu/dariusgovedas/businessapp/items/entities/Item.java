@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Setter
@@ -16,7 +17,7 @@ import java.util.List;
 public class Item {
 
     @Id
-    private Long id;
+    private UUID id;
 
     private Long itemNumber;
 

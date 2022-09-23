@@ -122,6 +122,6 @@ footer {
     text-align: right;
 }
 
-tr > td {
+thead, tbody {
     text-align: center;
 }

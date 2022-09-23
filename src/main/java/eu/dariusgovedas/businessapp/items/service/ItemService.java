@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -28,8 +29,12 @@ public class ItemService {
         Item item = new Item();
         ItemCategory category = itemPropertiesService.getItemCategory(itemDTO.getCategory());
 
-        item.setId(generateID());
-        item.setItemNumber(generateItemNumber(category.getId(), item.getId()));
+        if(itemDTO.getItemID() != null){
+            item.setId(itemDTO.getItemID());
+        } else {
+            item.setId(UUID.randomUUID());
+        }
+        item.setItemNumber(generateItemNumber(category));
         item.setCategory(category);
         item.setName(itemDTO.getName());
         item.setDescription(itemDTO.getDescription());
@@ -37,13 +42,9 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    private Long generateItemNumber(Long catID, Long itemID) {
-        return catID * 100000 + itemID;
-    }
-
-    private Long generateID() {
-        long itemsCount = itemRepository.count();
-        return itemsCount + 1;
+    private Long generateItemNumber(ItemCategory category) {
+        long itemNr = itemRepository.findItemByCategory(category).size() + 1L;
+        return category.getId() * 100000 + itemNr;
     }
 
     public Page<ItemDTO> getWarehouseStock(Pageable pageable) {
@@ -80,6 +81,7 @@ public class ItemService {
             ItemDTO itemDTO = new ItemDTO();
 
             itemDTO.setItemNumber(stockItem.getItem().getItemNumber());
+            itemDTO.setItemID(stockItem.getItem().getId());
             itemDTO.setName(stockItem.getItem().getName());
             itemDTO.setCategory(stockItem.getItem().getCategory().getCategoryName());
             itemDTO.setDescription(stockItem.getItem().getDescription());
@@ -102,6 +104,7 @@ public class ItemService {
         ItemDTO itemDTO = new ItemDTO();
 
         itemDTO.setItemNumber(item.getItemNumber());
+        itemDTO.setItemID(item.getId());
         itemDTO.setName(item.getName());
         itemDTO.setCategory(item.getCategory().getCategoryName());
         itemDTO.setDescription(item.getDescription());
@@ -133,5 +136,4 @@ public class ItemService {
                 .orElseThrow().getQuantity();
 
     }
-
 }

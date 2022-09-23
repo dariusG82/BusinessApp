@@ -1,8 +1,9 @@
 package eu.dariusgovedas.businessapp.sales.controllers;
 
-import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
-import eu.dariusgovedas.businessapp.companies.service.CompanyService;
 import eu.dariusgovedas.businessapp.common.PDFExporter;
+import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
+import eu.dariusgovedas.businessapp.companies.enums.CompanyType;
+import eu.dariusgovedas.businessapp.companies.service.CompanyService;
 import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
 import eu.dariusgovedas.businessapp.sales.entities.InvoiceDTO;
 import eu.dariusgovedas.businessapp.sales.entities.OrderDTO;
@@ -50,6 +51,8 @@ public class OrdersController {
     public String getSupplier(Model model, Pageable pageable, CompanyDTO companyDTO) {
 
         model.addAttribute("supplier", new CompanyDTO());
+
+        companyDTO.setCompanyType(CompanyType.SUPPLIER);
 
         model.addAttribute("results", companyService.searchForCompany(pageable, companyDTO));
 
