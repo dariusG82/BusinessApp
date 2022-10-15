@@ -13,4 +13,6 @@ public interface OrderLineRepository extends JpaRepository<OrderLine, Long> {
 
     @Query("FROM OrderLine line WHERE line.order.id = :order")
     List<OrderLine> findOrderLines(@Param("order") Long orderNumber);
+
+    OrderLine findByOrderIdAndItemName(Long orderNr, String itemName);
 }

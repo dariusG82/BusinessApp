@@ -5,7 +5,7 @@ import lombok.Getter;
 
 /*
     OPEN - Order is processing
-    INVOICED - Order is finalized, invoice is printed
+    INVOICED - Order is finalized, invoice is created
     CONFIRMED - Orders payment is confirmed
     FINISHED - Payment is received/made and Goods Movement Confirmed (reduce/increase Warehouse quantity)
     CANCELED - Order is canceled before Payment Received

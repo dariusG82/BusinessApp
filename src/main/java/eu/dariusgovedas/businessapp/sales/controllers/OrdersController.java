@@ -1,10 +1,10 @@
 package eu.dariusgovedas.businessapp.sales.controllers;
 
 import eu.dariusgovedas.businessapp.common.PDFExporter;
-import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
+import eu.dariusgovedas.businessapp.companies.entities.dto.CompanyDTO;
 import eu.dariusgovedas.businessapp.companies.enums.CompanyType;
 import eu.dariusgovedas.businessapp.companies.service.CompanyService;
-import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
+import eu.dariusgovedas.businessapp.items.entities.dto.ItemDTO;
 import eu.dariusgovedas.businessapp.sales.entities.InvoiceDTO;
 import eu.dariusgovedas.businessapp.sales.entities.OrderDTO;
 import eu.dariusgovedas.businessapp.sales.entities.OrderLineDTO;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletContext;
@@ -60,59 +59,40 @@ public class OrdersController {
     }
 
     @GetMapping("/private/sales/createPO/{id}")
-    public String createNewPurchaseOrder(@PathVariable Long id, Model model) {
+    public String createNewPurchaseOrder(@PathVariable Long id, Model model, Pageable pageable) {
 
-        model.addAttribute("product", new ItemDTO());
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setOrderQuantity(0L);
+        model.addAttribute("product", itemDTO);
         model.addAttribute("orderLines", Collections.emptyList());
 
         OrderDTO orderDTO = ordersService.createNewOrder(id, OrderType.PURCHASE);
 
-        model.addAttribute("order", orderDTO);
-
+        servletContext.setAttribute("stock", ordersService.getSupplierStock(id, pageable));
+        servletContext.setAttribute("supplierID", id);
+        servletContext.setAttribute("orderLinesDTO", ordersService.getSupplierOrderLines(id, orderDTO.getOrderNumber()));
         servletContext.setAttribute("orderDTO", orderDTO);
         servletContext.setAttribute("status", orderDTO.getStatus().toString());
 
         return "sales/orderForm";
     }
 
-
-    @GetMapping("/private/warehouse/findProduct")
-    public String createNewOrderLine(Model model, ItemDTO itemDTO) {
-
-        OrderDTO orderDTO = (OrderDTO) servletContext.getAttribute("orderDTO");
-
-        model.addAttribute("product", new ItemDTO());
-        model.addAttribute("orderLines", Collections.emptyList());
-        model.addAttribute("result", ordersService.getNewOrderLine(itemDTO.getItemNumber(), orderDTO));
-
-        return "sales/orderForm";
-    }
-
     @GetMapping("/private/sales/updateQuantity/{number}")
-    public String updateOrderLinePrice(@PathVariable("number") Long number, Model model, OrderLineDTO lineDTO) {
+    public String updateOrderLinePrice(@PathVariable("number") Long number, ItemDTO itemDTO, Model model) {
 
         OrderDTO orderDTO = (OrderDTO) servletContext.getAttribute("orderDTO");
-        Long orderNr = orderDTO.getOrderNumber();
+        List<OrderLineDTO> orderLineDTOs = (List<OrderLineDTO>) servletContext.getAttribute("orderLinesDTO");
 
         model.addAttribute("product", new ItemDTO());
         model.addAttribute("orderLines", Collections.emptyList());
-        model.addAttribute("result", ordersService.updateOrderLine(orderNr, number, lineDTO));
+        List<OrderLineDTO> updatedList = ordersService.updateOrderLine(orderLineDTOs, number, itemDTO.getOrderQuantity());
+
+        servletContext.removeAttribute("orderLinesDTO");
+        servletContext.setAttribute("orderLinesDTO", updatedList);
+        servletContext.removeAttribute("orderDTO");
+        servletContext.setAttribute("orderDTO", ordersService.getUpdatedOrderDTO(orderDTO, updatedList));
 
         return "sales/orderForm";
-    }
-
-    @PostMapping("/private/sales/saveOrderLine/{number}/{quantity}")
-    public String saveOrderLine(@PathVariable Long number, @PathVariable Long quantity) {
-
-
-        OrderDTO order = (OrderDTO) servletContext.getAttribute("orderDTO");
-        ordersService.saveNewOrderLine(order, number, quantity);
-        OrderDTO updatedOrderDTO = ordersService.getUpdatedOrderDTO(order);
-
-        servletContext.removeAttribute("orderDTO");
-        servletContext.setAttribute("orderDTO", updatedOrderDTO);
-
-        return "redirect:/private/orderForm";
     }
 
     @GetMapping("/private/orderForm")
@@ -131,8 +111,9 @@ public class OrdersController {
     @GetMapping("/private/sales/finishOrder")
     public String finishOrder() {
         OrderDTO orderDTO = (OrderDTO) servletContext.getAttribute("orderDTO");
+        List<OrderLineDTO> orderLineDTOS = (List<OrderLineDTO>) servletContext.getAttribute("orderLinesDTO");
 
-        ordersService.saveInvoicedOrder(orderDTO);
+        ordersService.saveNewOrder(orderDTO, orderLineDTOS);
 
         orderDTO.setStatus(OrderStatus.INVOICED);
 
@@ -140,7 +121,7 @@ public class OrdersController {
         servletContext.setAttribute("orderDTO", orderDTO);
 
         servletContext.removeAttribute("status");
-        servletContext.setAttribute("status", orderDTO.getStatus().toString());
+        servletContext.setAttribute("status", OrderStatus.INVOICED.toString());
 
         return "redirect:/private/orderForm";
     }
