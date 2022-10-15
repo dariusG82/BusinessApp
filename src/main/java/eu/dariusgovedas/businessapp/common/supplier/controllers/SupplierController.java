@@ -2,7 +2,7 @@ package eu.dariusgovedas.businessapp.common.supplier.controllers;
 
 import eu.dariusgovedas.businessapp.common.supplier.services.SupplierService;
 import eu.dariusgovedas.businessapp.companies.entities.Company;
-import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
+import eu.dariusgovedas.businessapp.items.entities.dto.ItemDTO;
 import eu.dariusgovedas.businessapp.items.service.ItemPropertiesService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;

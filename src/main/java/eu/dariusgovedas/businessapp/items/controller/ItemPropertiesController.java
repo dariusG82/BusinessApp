@@ -1,6 +1,6 @@
 package eu.dariusgovedas.businessapp.items.controller;
 
-import eu.dariusgovedas.businessapp.items.entities.ItemPropertiesDTO;
+import eu.dariusgovedas.businessapp.items.entities.dto.ItemPropertiesDTO;
 import eu.dariusgovedas.businessapp.items.service.ItemPropertiesService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;

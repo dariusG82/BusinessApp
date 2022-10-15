@@ -1,6 +1,8 @@
 package eu.dariusgovedas.businessapp.common.supplier.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SupplierWarehouse {
 
     @Id

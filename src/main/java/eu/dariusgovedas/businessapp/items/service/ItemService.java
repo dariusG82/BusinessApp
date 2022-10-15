@@ -2,7 +2,7 @@ package eu.dariusgovedas.businessapp.items.service;
 
 import eu.dariusgovedas.businessapp.items.entities.Item;
 import eu.dariusgovedas.businessapp.items.entities.ItemCategory;
-import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
+import eu.dariusgovedas.businessapp.items.entities.dto.ItemDTO;
 import eu.dariusgovedas.businessapp.items.entities.StockItem;
 import eu.dariusgovedas.businessapp.items.repository.ItemRepository;
 import lombok.AllArgsConstructor;
@@ -34,7 +34,9 @@ public class ItemService {
         } else {
             item.setId(UUID.randomUUID());
         }
-        item.setItemNumber(generateItemNumber(category));
+        if(itemDTO.getItemNumber() == null){
+            item.setItemNumber(generateItemNumber(category));
+        }
         item.setCategory(category);
         item.setName(itemDTO.getName());
         item.setDescription(itemDTO.getDescription());

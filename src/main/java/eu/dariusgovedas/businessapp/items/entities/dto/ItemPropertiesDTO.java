@@ -1,4 +1,4 @@
-package eu.dariusgovedas.businessapp.items.entities;
+package eu.dariusgovedas.businessapp.items.entities.dto;
 
 import lombok.Getter;
 import lombok.Setter;

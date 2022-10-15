@@ -1,7 +1,7 @@
 package eu.dariusgovedas.businessapp.items.service;
 
 import eu.dariusgovedas.businessapp.items.entities.ItemCategory;
-import eu.dariusgovedas.businessapp.items.entities.ItemPropertiesDTO;
+import eu.dariusgovedas.businessapp.items.entities.dto.ItemPropertiesDTO;
 import eu.dariusgovedas.businessapp.items.repository.ItemCategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +31,10 @@ public class ItemPropertiesService {
     public void saveNewCategory(ItemPropertiesDTO propertiesDTO) {
         ItemCategory itemCategory = new ItemCategory();
         String newCategoryName = propertiesDTO.getCategoryName();
+
+        if(newCategoryName.equals("")){
+            return;
+        }
 
         if(getItemCategory(newCategoryName) == null){
             itemCategory.setId(categoryRepository.count() + 1);

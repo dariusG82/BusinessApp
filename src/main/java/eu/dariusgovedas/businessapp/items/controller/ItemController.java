@@ -1,6 +1,6 @@
 package eu.dariusgovedas.businessapp.items.controller;
 
-import eu.dariusgovedas.businessapp.items.entities.ItemDTO;
+import eu.dariusgovedas.businessapp.items.entities.dto.ItemDTO;
 import eu.dariusgovedas.businessapp.items.service.ItemPropertiesService;
 import eu.dariusgovedas.businessapp.items.service.ItemService;
 import lombok.AllArgsConstructor;
