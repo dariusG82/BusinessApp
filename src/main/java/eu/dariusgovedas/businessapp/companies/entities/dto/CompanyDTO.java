@@ -1,4 +1,4 @@
-package eu.dariusgovedas.businessapp.companies.entities;
+package eu.dariusgovedas.businessapp.companies.entities.dto;
 
 import eu.dariusgovedas.businessapp.companies.enums.CompanyType;
 import lombok.Getter;

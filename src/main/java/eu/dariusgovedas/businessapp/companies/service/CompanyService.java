@@ -3,7 +3,7 @@ package eu.dariusgovedas.businessapp.companies.service;
 import eu.dariusgovedas.businessapp.common.supplier.entities.SupplierWarehouse;
 import eu.dariusgovedas.businessapp.common.supplier.repositories.SupplierWarehouseRepository;
 import eu.dariusgovedas.businessapp.companies.entities.Company;
-import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
+import eu.dariusgovedas.businessapp.companies.entities.dto.CompanyDTO;
 import eu.dariusgovedas.businessapp.companies.entities.ContactDetails;
 import eu.dariusgovedas.businessapp.companies.entities.RegistrationAddress;
 import eu.dariusgovedas.businessapp.companies.enums.CompanyType;

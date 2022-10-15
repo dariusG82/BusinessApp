@@ -1,6 +1,6 @@
 package eu.dariusgovedas.businessapp.companies.controller;
 
-import eu.dariusgovedas.businessapp.companies.entities.CompanyDTO;
+import eu.dariusgovedas.businessapp.companies.entities.dto.CompanyDTO;
 import eu.dariusgovedas.businessapp.companies.service.CompanyPropertiesService;
 import eu.dariusgovedas.businessapp.companies.service.CompanyService;
 import lombok.AllArgsConstructor;

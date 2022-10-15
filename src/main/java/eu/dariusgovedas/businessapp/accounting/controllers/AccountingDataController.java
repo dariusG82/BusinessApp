@@ -1,6 +1,7 @@
 package eu.dariusgovedas.businessapp.accounting.controllers;
 
-import eu.dariusgovedas.businessapp.accounting.entities.BankDTO;
+import eu.dariusgovedas.businessapp.accounting.entities.dto.AccountDTO;
+import eu.dariusgovedas.businessapp.accounting.entities.dto.BankDTO;
 import eu.dariusgovedas.businessapp.accounting.services.BankService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ public class AccountingDataController {
     public String openAccountingDataEditor(Model model){
 
         model.addAttribute("bankData", new BankDTO());
+        model.addAttribute("accountData", new AccountDTO());
+        model.addAttribute("bankList", bankService.getAllBanks());
 
         return "admin/editAccountingData";
     }
@@ -31,9 +34,9 @@ public class AccountingDataController {
     }
 
     @PostMapping("/private/addAccount")
-    public String saveNewAccount(BankDTO bankDTO){
+    public String saveNewAccount(AccountDTO accountDTO){
 
-        bankService.addAccount(bankDTO);
+        bankService.addAccount(accountDTO);
 
         return "redirect:/private/editAccountingData";
     }
