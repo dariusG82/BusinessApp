@@ -12,7 +12,7 @@
       <th th:text="#{item.itemName}">Item Name</th>
       <th th:text="#{item.itemDescription}">Description</th>
       <th th:text="#{item.salePrice}">Price</th>
-      <th th:text="#{item.quantity}">StreetAddress</th>
+      <th th:text="#{item.quantity}">Quantity</th>
       <th th:text="#{testData.supplier.editStock}">Edit Stock</th>
     </tr>
     </thead>
@@ -33,8 +33,9 @@
     </tr>
     </tbody>
   </table>
-  <form th:action="@{/private/testData/addSupplies/{id}(id=${supplierID})}" method="get">
+  <form th:action="@{/private/testData/addSupplies/{id}(id=${supplierID})}" method="get" style="text-align: center">
     <button id="addStockItem" class="edit-delete-update">
+      <p th:text="#{supplier.addNewItem}">Add item</p>
       <i class="fa-solid fa-pen-to-square"></i>
     </button>
   </form>
