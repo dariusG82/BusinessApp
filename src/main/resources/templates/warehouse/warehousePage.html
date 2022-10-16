@@ -36,7 +36,7 @@
             </div>
 
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <form>
+                <form th:action="@{/private/order/receive}">
                     <button class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative custom-card">
                         <div class="col p-4 d-flex flex-column position-static">
                             <h4 th:text="#{warehousePage.receiveOrder}">Receive Goods</h4>

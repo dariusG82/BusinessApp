@@ -26,7 +26,7 @@ public class AccountingService {
 
     public Page<OrderDTO> getAllOpenOrders(Pageable pageable) {
 
-        return ordersService.getOpenOrdersDTOs(pageable);
+        return ordersService.getOrdersByStatus(pageable, OrderStatus.INVOICED);
     }
 
     @Transactional

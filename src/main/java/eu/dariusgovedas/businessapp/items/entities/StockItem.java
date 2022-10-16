@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 public class StockItem {
 
     @Id
-    @GeneratedValue
     private Long stockID;
 
     private BigDecimal purchasePrice;

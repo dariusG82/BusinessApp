@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{warehousePage.receiveOrder.title}, ~{:: #main})">
+<div id="main">
+
+    <div class="container py-4">
+        <table th:if="${not orders.empty}" class="table align-middle background-light page-block">
+            <thead>
+            <tr>
+                <td th:text="#{payment.orderNr}">Order Nr</td>
+                <td th:text="#{payment.orderDate}">Date</td>
+                <td th:text="#{payment.customer}">Customer</td>
+                <td th:text="#{payment.supplier}">Supplier</td>
+                <td th:text="#{warehouse.receiveGoods}"></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.orderNumber}"></td>
+                <td th:text="${order.orderDate}"></td>
+                <td th:text="${order.client}"></td>
+                <td th:text="${order.supplier}"></td>
+                <td>
+                    <form th:action="@{/private/warehouse/displayGoods/{orderNr} (orderNr=${order.orderNumber})}"
+                          method="get">
+                        <button type="submit">
+                            <i class="fa-solid fa-cash-register font-dark"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${not orderLines.empty}" class="container py-4">
+        <table class="table align-middle background-light page-block">
+            <thead>
+            <tr>
+                <td th:text="#{item.itemName}">ItemName</td>
+                <td th:text="#{item.quantity}">Quantity</td>
+                <td th:text="#{item.purchasePrice}">Price</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderLine : ${orderLines}">
+                <td th:text="${orderLine.itemName}">Name</td>
+                <td th:text="${orderLine.orderQuantity}"></td>
+                <td th:text="${orderLine.linePrice}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div>
+            <form th:action="@{/private/warehouse/receiveGoods}"
+                  method="post">
+                <button type="submit">
+                    <i class="fa-solid fa-cash-register font-dark"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</html>

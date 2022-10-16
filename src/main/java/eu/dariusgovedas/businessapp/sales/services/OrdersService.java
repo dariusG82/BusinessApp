@@ -172,8 +172,8 @@ public class OrdersService {
         return invoiceDTO;
     }
 
-    public Page<OrderDTO> getOpenOrdersDTOs(Pageable pageable) {
-        List<Order> orders = ordersRepository.findByStatus(OrderStatus.INVOICED);
+    public Page<OrderDTO> getOrdersByStatus(Pageable pageable, OrderStatus status) {
+        List<Order> orders = ordersRepository.findByStatus(status);
         List<OrderDTO> orderDTOS = getOrderDTOS(orders);
 
         return new PageImpl<>(orderDTOS, pageable, orderDTOS.size());
@@ -189,6 +189,10 @@ public class OrdersService {
         }
 
         return orderDTOS;
+    }
+
+    public OrderDTO getOrderDTOByID(Long orderID){
+        return getOrderDTOFromOrder(getOrderByID(orderID));
     }
 
     public Order getOrderByID(Long orderID) {
@@ -274,5 +278,14 @@ public class OrdersService {
         order.setStatus(OrderStatus.INVOICED);
         order.setOrderLines(new ArrayList<>());
         return order;
+    }
+
+    public void updateOrderStatus(Long orderNumber, OrderStatus status) {
+        Order order = ordersRepository.findById(orderNumber).orElse(null);
+
+        if(order != null){
+            order.setStatus(status);
+            ordersRepository.save(order);
+        }
     }
 }
