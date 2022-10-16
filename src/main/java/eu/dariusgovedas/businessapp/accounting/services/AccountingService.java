@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,15 +38,17 @@ public class AccountingService {
 
         Payment payment = createPayment(order);
 
-        paymentRepository.save(payment);
+        boolean isPaymentSuccess = tryToPayForOrder(payment);
 
-        payForOrder(payment);
-
-        order.setStatus(OrderStatus.CONFIRMED);
+        if(isPaymentSuccess){
+            paymentRepository.save(payment);
+            order.setStatus(OrderStatus.CONFIRMED);
+        }
     }
 
     private Payment createPayment(Order order){
         Payment payment = new Payment();
+
         payment.setID(UUID.randomUUID());
         payment.setOrderNumber(order.getId());
         payment.setCustomerName(order.getClientName());
@@ -57,9 +60,16 @@ public class AccountingService {
         return payment;
     }
 
-    private void payForOrder(Payment payment){
-        BankAccount account = accountRepository.findById(1L).orElseThrow(IllegalArgumentException::new);
+    private boolean tryToPayForOrder(Payment payment){
+        List<BankAccount> accountList = accountRepository.findAll();
 
-        account.setBalance(account.getBalance().subtract(payment.getPaymentAmount()));
+        for (BankAccount account : accountList) {
+            if (account.getBalance().compareTo(payment.getPaymentAmount()) > 0) {
+                account.setBalance(account.getBalance().subtract(payment.getPaymentAmount()));
+                return true;
+            }
+        }
+
+        return false;
     }
 }
