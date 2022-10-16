@@ -254,6 +254,8 @@ public class OrdersService {
         order.setStatus(OrderStatus.INVOICED);
         order.setOrderLines(new ArrayList<>());
 
+        ordersRepository.save(order);
+
         long lineNr = 1L;
 
         for (OrderLineDTO lineDTO : orderLineDTOS){
@@ -261,9 +263,9 @@ public class OrdersService {
                 OrderLine orderLine = getOrderLineFromDTO(lineDTO);
                 orderLine.setLineNumber(lineNr++);
                 order.addOrderLine(orderLine);
+                orderLineRepository.save(orderLine);
             }
         }
 
-        ordersRepository.save(order);
     }
 }
