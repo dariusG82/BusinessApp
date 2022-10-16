@@ -2,14 +2,13 @@ package eu.dariusgovedas.businessapp.sales.services;
 
 import eu.dariusgovedas.businessapp.common.supplier.entities.SupplierItem;
 import eu.dariusgovedas.businessapp.common.supplier.entities.SupplierItemDto;
-import eu.dariusgovedas.businessapp.common.supplier.services.SupplierService;
+import eu.dariusgovedas.businessapp.common.supplier.services.SupplierItemsService;
 import eu.dariusgovedas.businessapp.companies.entities.Company;
 import eu.dariusgovedas.businessapp.companies.entities.dto.CompanyDTO;
 import eu.dariusgovedas.businessapp.companies.service.CompanyService;
 import eu.dariusgovedas.businessapp.sales.entities.*;
 import eu.dariusgovedas.businessapp.sales.enums.OrderStatus;
 import eu.dariusgovedas.businessapp.sales.enums.OrderType;
-import eu.dariusgovedas.businessapp.sales.repositories.OrderLineRepository;
 import eu.dariusgovedas.businessapp.sales.repositories.OrdersRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,11 +31,10 @@ public class OrdersService {
     private static final BigDecimal VAT = BigDecimal.valueOf(0.21);
 
     private OrdersRepository ordersRepository;
-    private OrderLineRepository orderLineRepository;
 
+    private OrderLineService orderLineService;
     private CompanyService companyService;
-
-    private SupplierService supplierService;
+    private SupplierItemsService supplierItemsService;
 
     public OrderDTO createNewOrder(Long id, OrderType orderType) {
 
@@ -99,7 +97,7 @@ public class OrdersService {
     }
 
     public List<OrderLineDTO> getOrderLines(OrderDTO order) {
-        List<OrderLine> orderLines = orderLineRepository.findOrderLines(order.getOrderNumber());
+        List<OrderLine> orderLines = orderLineService.getOrderLinesByOrder(order.getOrderNumber());
         List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
 
         if(orderLines.size() == 0){
@@ -128,7 +126,7 @@ public class OrdersService {
     private OrderLine getOrderLineFromDTO(OrderLineDTO orderLineDTO) {
         OrderLine orderLine = new OrderLine();
 
-        orderLine.setId(orderLineRepository.count() + 1);
+        orderLine.setId(orderLineService.getNewOrderLineID());
         orderLine.setItemName(orderLineDTO.getItemName());
         orderLine.setQuantity(orderLineDTO.getOrderQuantity());
         orderLine.setPurchasePrice(orderLineDTO.getPurchasePrice());
@@ -158,7 +156,7 @@ public class OrdersService {
         CompanyDTO companyDTO = companyService.getClientDTOByName(orderDTO.getClient());
         CompanyDTO supplierDTO = companyService.getClientDTOByName(orderDTO.getSupplier());
 
-        List<OrderLine> orderLines = orderLineRepository.findOrderLines(orderDTO.getOrderNumber());
+        List<OrderLine> orderLines = orderLineService.getOrderLinesByOrder(orderDTO.getOrderNumber());
         List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
         if(!(orderLines == null)){
             for(OrderLine line : orderLines){
@@ -198,7 +196,7 @@ public class OrdersService {
     }
 
     public Page<SupplierItemDto> getSupplierStock(Long supplierID, Pageable pageable) {
-        Page<SupplierItem> supplierStock = supplierService.getSupplierStock(supplierID, pageable);
+        Page<SupplierItem> supplierStock = supplierItemsService.getSupplierStock(supplierID, pageable);
         List<SupplierItemDto> itemDTOS = new ArrayList<>();
 
         for(SupplierItem supplierItem : supplierStock){
@@ -215,7 +213,7 @@ public class OrdersService {
     }
 
     public List<OrderLineDTO> getSupplierOrderLines(Long supplierID, Long orderNumber) {
-        List<SupplierItem> supplierItems = supplierService.getSupplierStock(supplierID, Pageable.unpaged()).stream().toList();
+        List<SupplierItem> supplierItems = supplierItemsService.getSupplierStock(supplierID, Pageable.unpaged()).stream().toList();
         List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
 
         for (SupplierItem item : supplierItems){
@@ -263,7 +261,7 @@ public class OrdersService {
                 OrderLine orderLine = getOrderLineFromDTO(lineDTO);
                 orderLine.setLineNumber(lineNr++);
                 order.addOrderLine(orderLine);
-                orderLineRepository.save(orderLine);
+                orderLineService.saveOrderLine(orderLine);
             }
         }
 

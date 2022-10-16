@@ -1,11 +1,11 @@
 package eu.dariusgovedas.businessapp.companies.service;
 
 import eu.dariusgovedas.businessapp.common.supplier.entities.SupplierWarehouse;
-import eu.dariusgovedas.businessapp.common.supplier.repositories.SupplierWarehouseRepository;
+import eu.dariusgovedas.businessapp.common.supplier.services.SupplierWarehouseService;
 import eu.dariusgovedas.businessapp.companies.entities.Company;
-import eu.dariusgovedas.businessapp.companies.entities.dto.CompanyDTO;
 import eu.dariusgovedas.businessapp.companies.entities.ContactDetails;
 import eu.dariusgovedas.businessapp.companies.entities.RegistrationAddress;
+import eu.dariusgovedas.businessapp.companies.entities.dto.CompanyDTO;
 import eu.dariusgovedas.businessapp.companies.enums.CompanyType;
 import eu.dariusgovedas.businessapp.companies.repository.CompanyRepository;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,8 @@ import java.util.List;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final SupplierWarehouseRepository supplierWarehouseRepository;
+
+    private final SupplierWarehouseService warehouseService;
 
     @Transactional
     public void saveCompanyData(CompanyDTO companyDTO) {
@@ -254,11 +255,11 @@ public class CompanyService {
     @Transactional
     public void saveNewSupplier(Company company) {
         SupplierWarehouse supplierWarehouse = new SupplierWarehouse();
-        supplierWarehouse.setWarehouseID(supplierWarehouseRepository.count() + 1);
+        supplierWarehouse.setWarehouseID(warehouseService.getNewWarehouseNumber());
         supplierWarehouse.setSupplierName(company.getCompanyName());
         supplierWarehouse.setSupplierItemList(new ArrayList<>());
 
-        supplierWarehouseRepository.save(supplierWarehouse);
+        warehouseService.saveNewWarehouse(supplierWarehouse);
     }
 
     public Page<CompanyDTO> getSuppliers(Pageable pageable) {

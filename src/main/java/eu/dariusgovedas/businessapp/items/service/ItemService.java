@@ -22,6 +22,7 @@ import java.util.UUID;
 public class ItemService {
 
     private ItemRepository itemRepository;
+
     private ItemPropertiesService itemPropertiesService;
 
     @Transactional
@@ -44,7 +45,7 @@ public class ItemService {
         itemRepository.save(item);
     }
 
-    private Long generateItemNumber(ItemCategory category) {
+    public Long generateItemNumber(ItemCategory category) {
         long itemNr = itemRepository.findItemByCategory(category).size() + 1L;
         return category.getId() * 100000 + itemNr;
     }
@@ -94,48 +95,5 @@ public class ItemService {
             itemDTOList.add(itemDTO);
         }
         return itemDTOList;
-    }
-
-    public ItemDTO getItemDTOByItemNumber(Long number){
-        Item item = itemRepository.findItemByItemNumber(number);
-
-        return item == null ? new ItemDTO() : getItemDTOFromItem(item);
-    }
-
-    private ItemDTO getItemDTOFromItem(Item item) {
-        ItemDTO itemDTO = new ItemDTO();
-
-        itemDTO.setItemNumber(item.getItemNumber());
-        itemDTO.setItemID(item.getId());
-        itemDTO.setName(item.getName());
-        itemDTO.setCategory(item.getCategory().getCategoryName());
-        itemDTO.setDescription(item.getDescription());
-        BigDecimal salePrice = getSalePrice(item);
-        itemDTO.setSalePrice(salePrice);
-        Long quantity = getQuantity(item, salePrice);
-        itemDTO.setStockQuantity(quantity);
-
-        return itemDTO;
-    }
-
-    private BigDecimal getSalePrice(Item item) {
-        List<StockItem> stockItems = item.getStockItems();
-        for(StockItem stockItem : stockItems){
-            if(stockItem.getQuantity() > 0){
-                return stockItem.getSalePrice();
-            }
-        }
-        return BigDecimal.ZERO;
-    }
-
-    private Long getQuantity(Item item, BigDecimal salePrice) {
-        if(salePrice.equals(BigDecimal.ZERO)){
-            return 0L;
-        }
-        return item.getStockItems().stream()
-                .filter(stockItem -> stockItem.getSalePrice().equals(salePrice))
-                .findFirst()
-                .orElseThrow().getQuantity();
-
     }
 }

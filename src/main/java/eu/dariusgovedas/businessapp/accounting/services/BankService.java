@@ -4,7 +4,6 @@ import eu.dariusgovedas.businessapp.accounting.entities.Bank;
 import eu.dariusgovedas.businessapp.accounting.entities.BankAccount;
 import eu.dariusgovedas.businessapp.accounting.entities.dto.AccountDTO;
 import eu.dariusgovedas.businessapp.accounting.entities.dto.BankDTO;
-import eu.dariusgovedas.businessapp.accounting.repositories.BankAccountRepository;
 import eu.dariusgovedas.businessapp.accounting.repositories.BankRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +22,7 @@ import java.util.List;
 public class BankService {
 
     private BankRepository bankRepository;
-    private BankAccountRepository accountRepository;
+    private BankAccountService accountService;
 
     @Transactional
     public void addBank(BankDTO bankDTO) {
@@ -43,12 +42,12 @@ public class BankService {
 
         BankAccount account = new BankAccount();
 
-        account.setId(accountRepository.count() + 1);
+        account.setId(accountService.getNewAccountID());
         account.setBank(bank);
         account.setNumber(accountDTO.getAccountNumber());
         account.setBalance(BigDecimal.ZERO);
 
-        accountRepository.save(account);
+        accountService.saveNewAccount(account);
     }
 
     public List<BankDTO> getAllBanks() {

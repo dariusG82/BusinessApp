@@ -1,6 +1,6 @@
 package eu.dariusgovedas.businessapp.common.supplier.controllers;
 
-import eu.dariusgovedas.businessapp.common.supplier.services.SupplierService;
+import eu.dariusgovedas.businessapp.common.supplier.services.SupplierItemsService;
 import eu.dariusgovedas.businessapp.companies.entities.Company;
 import eu.dariusgovedas.businessapp.items.entities.dto.ItemDTO;
 import eu.dariusgovedas.businessapp.items.service.ItemPropertiesService;
@@ -18,14 +18,14 @@ import java.util.List;
 @AllArgsConstructor
 public class SupplierController {
 
-    private final SupplierService supplierService;
+    private final SupplierItemsService supplierItemsService;
     private final ItemPropertiesService itemPropertiesService;
 
     @GetMapping("/private/testData/showSuppliers")
     public String showSuppliers(Model model, Pageable pageable){
 
         model.addAttribute("supplier", new Company());
-        model.addAttribute("suppliersList", supplierService.getSuppliers(pageable));
+        model.addAttribute("suppliersList", supplierItemsService.getSuppliers(pageable));
 
         return "testData/suppliers";
     }
@@ -34,7 +34,7 @@ public class SupplierController {
     public String openSupplierStock(@PathVariable Long id, Model model, Pageable pageable){
 
         model.addAttribute("supplierID", id);
-        model.addAttribute("stockList", supplierService.getSupplierStock(id, pageable));
+        model.addAttribute("stockList", supplierItemsService.getSupplierStock(id, pageable));
 
         return "testData/stockPage";
     }
@@ -53,7 +53,7 @@ public class SupplierController {
     @PostMapping("/private/testData/{id}/addSupplierItem")
     public String addSupplierItem(@PathVariable Long id, ItemDTO itemDTO){
 
-        supplierService.addItem(id, itemDTO);
+        supplierItemsService.addItem(id, itemDTO);
 
         return "redirect:/private/testData/showSuppliers";
     }

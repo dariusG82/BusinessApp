@@ -2,8 +2,6 @@ package eu.dariusgovedas.businessapp.accounting.services;
 
 import eu.dariusgovedas.businessapp.accounting.entities.BankAccount;
 import eu.dariusgovedas.businessapp.accounting.entities.Payment;
-import eu.dariusgovedas.businessapp.accounting.repositories.BankAccountRepository;
-import eu.dariusgovedas.businessapp.accounting.repositories.PaymentRepository;
 import eu.dariusgovedas.businessapp.sales.entities.Order;
 import eu.dariusgovedas.businessapp.sales.entities.OrderDTO;
 import eu.dariusgovedas.businessapp.sales.enums.OrderStatus;
@@ -23,8 +21,8 @@ import java.util.UUID;
 public class AccountingService {
 
     private OrdersService ordersService;
-    private PaymentRepository paymentRepository;
-    private BankAccountRepository accountRepository;
+    private PaymentService paymentService;
+    private BankAccountService accountService;
 
     public Page<OrderDTO> getAllOpenOrders(Pageable pageable) {
 
@@ -41,7 +39,7 @@ public class AccountingService {
         boolean isPaymentSuccess = tryToPayForOrder(payment);
 
         if(isPaymentSuccess){
-            paymentRepository.save(payment);
+            paymentService.savePayment(payment);
             order.setStatus(OrderStatus.CONFIRMED);
         }
     }
@@ -61,7 +59,7 @@ public class AccountingService {
     }
 
     private boolean tryToPayForOrder(Payment payment){
-        List<BankAccount> accountList = accountRepository.findAll();
+        List<BankAccount> accountList = accountService.getAllAccounts();
 
         for (BankAccount account : accountList) {
             if (account.getBalance().compareTo(payment.getPaymentAmount()) > 0) {
