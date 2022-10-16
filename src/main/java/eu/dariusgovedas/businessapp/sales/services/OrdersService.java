@@ -239,18 +239,7 @@ public class OrdersService {
 
     @Transactional
     public void saveNewOrder(OrderDTO orderDTO, List<OrderLineDTO> orderLineDTOS) {
-        Order order = new Order();
-
-        order.setId(orderDTO.getOrderNumber());
-        order.setOrderType(orderDTO.getOrderType());
-        order.setOrderDate(orderDTO.getOrderDate());
-        order.setClientName(orderDTO.getClient());
-        order.setSupplierName(orderDTO.getSupplier());
-        order.setOrderAmount(orderDTO.getAmount());
-        order.setVatAmount(orderDTO.getVatAmount());
-        order.setAmountWithVAT(orderDTO.getAmountWithVAT());
-        order.setStatus(OrderStatus.INVOICED);
-        order.setOrderLines(new ArrayList<>());
+        Order order = createOrder(orderDTO);
 
         ordersRepository.save(order);
 
@@ -265,5 +254,25 @@ public class OrdersService {
             }
         }
 
+        String supplierName = order.getSupplierName();
+
+        supplierItemsService.updateSupplierStock(supplierName, orderLineDTOS);
+
+    }
+
+    private static Order createOrder(OrderDTO orderDTO) {
+        Order order = new Order();
+
+        order.setId(orderDTO.getOrderNumber());
+        order.setOrderType(orderDTO.getOrderType());
+        order.setOrderDate(orderDTO.getOrderDate());
+        order.setClientName(orderDTO.getClient());
+        order.setSupplierName(orderDTO.getSupplier());
+        order.setOrderAmount(orderDTO.getAmount());
+        order.setVatAmount(orderDTO.getVatAmount());
+        order.setAmountWithVAT(orderDTO.getAmountWithVAT());
+        order.setStatus(OrderStatus.INVOICED);
+        order.setOrderLines(new ArrayList<>());
+        return order;
     }
 }

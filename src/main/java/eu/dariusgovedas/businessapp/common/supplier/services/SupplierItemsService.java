@@ -11,6 +11,7 @@ import eu.dariusgovedas.businessapp.items.entities.ItemCategory;
 import eu.dariusgovedas.businessapp.items.entities.dto.ItemDTO;
 import eu.dariusgovedas.businessapp.items.service.ItemPropertiesService;
 import eu.dariusgovedas.businessapp.items.service.ItemService;
+import eu.dariusgovedas.businessapp.sales.entities.OrderLineDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -58,7 +59,9 @@ public class SupplierItemsService {
         ItemCategory category = itemPropertiesService.getItemCategory(itemDTO.getCategory());
 
         supplierItem.setItemID(UUID.randomUUID());
+        itemDTO.setItemID(supplierItem.getItemID());
         supplierItem.setItemNumber(generateItemNumber(category));
+        itemDTO.setItemNumber(supplierItem.getItemNumber());
         supplierItem.setWarehouse(supplierWarehouse);
         supplierItem.setItemName(itemDTO.getName());
         supplierItem.setItemDescription(itemDTO.getDescription());
@@ -74,5 +77,18 @@ public class SupplierItemsService {
 
     private Long generateItemNumber(ItemCategory category) {
         return itemService.generateItemNumber(category);
+    }
+
+    @Transactional
+    public void updateSupplierStock(String supplierName, List<OrderLineDTO> orderLineDTOS) {
+        SupplierWarehouse warehouse = warehouseService.getSupplierWarehouse(supplierName);
+
+        for (OrderLineDTO lineDTO : orderLineDTOS){
+            UUID itemID = itemService.getItemID(lineDTO.getItemNumber());
+            SupplierItem item = supplierItemsRepository.findByWarehouseAndItemId(warehouse.getWarehouseID(), itemID);
+            Long quantity = lineDTO.getStockQuantity() - lineDTO.getOrderQuantity();
+            item.setQuantity(quantity);
+            supplierItemsRepository.save(item);
+        }
     }
 }

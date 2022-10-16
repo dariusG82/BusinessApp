@@ -37,6 +37,8 @@ public class ItemService {
         }
         if(itemDTO.getItemNumber() == null){
             item.setItemNumber(generateItemNumber(category));
+        } else {
+            item.setItemNumber(itemDTO.getItemNumber());
         }
         item.setCategory(category);
         item.setName(itemDTO.getName());
@@ -95,5 +97,9 @@ public class ItemService {
             itemDTOList.add(itemDTO);
         }
         return itemDTOList;
+    }
+
+    public UUID getItemID(Long itemNumber) {
+        return itemRepository.findItemByItemNumber(itemNumber).getId();
     }
 }
