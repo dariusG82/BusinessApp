@@ -139,7 +139,9 @@ public class OrdersController {
 
         InvoiceDTO invoiceDTO = ordersService.getInvoiceDTO(orderDTO);
 
-        PDFExporter exporter = new PDFExporter(invoiceDTO);
-        exporter.export(response);
+        if(invoiceDTO != null){
+            PDFExporter exporter = new PDFExporter(invoiceDTO);
+            exporter.export(response);
+        }
     }
 }

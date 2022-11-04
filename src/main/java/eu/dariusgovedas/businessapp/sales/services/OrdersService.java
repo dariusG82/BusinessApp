@@ -43,6 +43,189 @@ public class OrdersService {
         return getOrderDTOFromOrder(order);
     }
 
+    Order createOrder(Long id, OrderType type) {
+        Order order = new Order();
+        Company company = companyService.getCompanyById(id);
+        Company userBusiness = companyService.getBusinessOwner();
+        Long orderNr = ordersRepository.count() + 1;
+
+        order.setId(orderNr);
+        order.setOrderType(type);
+        order.setOrderDate(LocalDate.now());
+        if (type.equals(OrderType.PURCHASE)) {
+            order.setClientName(userBusiness.getCompanyName());
+            order.setSupplierName(company.getCompanyName());
+        } else {
+            order.setClientName(company.getCompanyName());
+            order.setSupplierName(userBusiness.getCompanyName());
+        }
+        order.setStatus(OrderStatus.OPEN);
+        order.setOrderAmount(BigDecimal.ZERO);
+
+        return order;
+    }
+
+    public List<OrderLineDTO> updateOrderLine(List<OrderLineDTO> orderLineDTOS, Long itemNumber, Long quantity) {
+
+        for (OrderLineDTO orderLineDTO : orderLineDTOS) {
+            if (orderLineDTO.getItemNumber().equals(itemNumber)) {
+                if (quantity == null || quantity <= 0) {
+                    quantity = 0L;
+                }
+                orderLineDTO.setOrderQuantity(quantity);
+                orderLineDTO.setLinePrice(BigDecimal.valueOf(quantity).multiply(orderLineDTO.getPurchasePrice()));
+            }
+        }
+
+        return orderLineDTOS;
+    }
+
+    public List<OrderLineDTO> getOrderLines(OrderDTO order) {
+        List<OrderLine> orderLines = orderLineService.getOrderLinesByOrder(order.getOrderNumber());
+        List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
+
+        if (orderLines.size() == 0) {
+            return null;
+        }
+
+        for (OrderLine orderLine : orderLines) {
+            if (orderLine.getQuantity() != null && orderLine.getQuantity() > 0) {
+                OrderLineDTO orderLineDTO = getOrderLineDTOFromOrderLine(orderLine);
+                orderLineDTOS.add(orderLineDTO);
+            }
+        }
+
+        return orderLineDTOS;
+    }
+
+    public InvoiceDTO getInvoiceDTO(OrderDTO orderDTO) {
+        InvoiceDTO invoiceDTO = new InvoiceDTO();
+        CompanyDTO companyDTO = companyService.getCompanyDTOByName(orderDTO.getClient());
+        CompanyDTO supplierDTO = companyService.getCompanyDTOByName(orderDTO.getSupplier());
+
+        if(companyDTO == null || supplierDTO == null){
+            return null;
+        }
+
+        List<OrderLine> orderLines = orderLineService.getOrderLinesByOrder(orderDTO.getOrderNumber());
+        List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
+        if (!(orderLines == null)) {
+            for (OrderLine line : orderLines) {
+                orderLineDTOS.add(getOrderLineDTOFromOrderLine(line));
+            }
+        }
+
+        invoiceDTO.setCustomer(companyDTO);
+        invoiceDTO.setSupplier(supplierDTO);
+        invoiceDTO.setOrder(orderDTO);
+        invoiceDTO.setOrderLines(orderLineDTOS);
+
+        return invoiceDTO;
+    }
+
+    public Page<OrderDTO> getOrdersByStatus(Pageable pageable, OrderStatus status) {
+        List<Order> orders = ordersRepository.findByStatus(status);
+        List<OrderDTO> orderDTOS = getOrderDTOS(orders);
+
+        return new PageImpl<>(orderDTOS, pageable, orderDTOS.size());
+    }
+
+    public OrderDTO getOrderDTOByID(Long orderID) {
+        return getOrderDTOFromOrder(getOrderByID(orderID));
+    }
+
+    public Order getOrderByID(Long orderID) {
+        return ordersRepository.findById(orderID).orElseThrow(IllegalArgumentException::new);
+    }
+
+    public Page<SupplierItemDto> getSupplierStock(Long supplierID, Pageable pageable) {
+        Page<SupplierItem> supplierStock = supplierItemsService.getSupplierStock(supplierID, pageable);
+        List<SupplierItemDto> itemDTOS = new ArrayList<>();
+
+        for (SupplierItem supplierItem : supplierStock) {
+            SupplierItemDto supplierItemDto = new SupplierItemDto();
+            supplierItemDto.setItemID(supplierItem.getItemID());
+            supplierItemDto.setItemName(supplierItem.getItemName());
+            supplierItemDto.setItemDescription(supplierItem.getItemDescription());
+            supplierItemDto.setPrice(supplierItem.getPrice());
+            supplierItemDto.setQuantity(supplierItem.getQuantity());
+            itemDTOS.add(supplierItemDto);
+        }
+
+        return new PageImpl<>(itemDTOS, pageable, itemDTOS.size());
+    }
+
+    public List<OrderLineDTO> getSupplierOrderLines(Long supplierID, Long orderNumber) {
+        List<SupplierItem> supplierItems = supplierItemsService.getSupplierStock(supplierID, Pageable.unpaged()).stream().toList();
+        List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
+
+        for (SupplierItem item : supplierItems) {
+            orderLineDTOS.add(createOrderLineDTOForSupplierItem(item, orderNumber));
+        }
+
+        return orderLineDTOS;
+    }
+
+    @Transactional
+    public void saveNewOrder(OrderDTO orderDTO, List<OrderLineDTO> orderLineDTOS) {
+        Order order = createOrder(orderDTO);
+
+        ordersRepository.save(order);
+
+        long lineNr = 1L;
+
+        for (OrderLineDTO lineDTO : orderLineDTOS) {
+            if (lineDTO.getOrderQuantity() != null && lineDTO.getOrderQuantity() > 0) {
+                OrderLine orderLine = getOrderLineFromDTO(lineDTO);
+                orderLine.setLineNumber(lineNr++);
+                order.addOrderLine(orderLine);
+                orderLineService.saveOrderLine(orderLine);
+            }
+        }
+
+        String supplierName = order.getSupplierName();
+
+        supplierItemsService.updateSupplierStock(supplierName, orderLineDTOS);
+
+    }
+
+    public void updateOrderStatus(Long orderNumber, OrderStatus status) {
+        Order order = ordersRepository.findById(orderNumber).orElse(null);
+
+        if (order != null) {
+            order.setStatus(status);
+            ordersRepository.save(order);
+        }
+    }
+
+    private Order createOrder(OrderDTO orderDTO) {
+        Order order = new Order();
+
+        order.setId(orderDTO.getOrderNumber());
+        order.setOrderType(orderDTO.getOrderType());
+        order.setOrderDate(orderDTO.getOrderDate());
+        order.setClientName(orderDTO.getClient());
+        order.setSupplierName(orderDTO.getSupplier());
+        order.setOrderAmount(orderDTO.getAmount());
+        order.setVatAmount(orderDTO.getVatAmount());
+        order.setAmountWithVAT(orderDTO.getAmountWithVAT());
+        order.setStatus(OrderStatus.INVOICED);
+        order.setOrderLines(new ArrayList<>());
+        return order;
+    }
+
+    private List<OrderDTO> getOrderDTOS(List<Order> orders) {
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+
+        if (orders != null) {
+            for (Order order : orders) {
+                orderDTOS.add(getOrderDTOFromOrder(order));
+            }
+        }
+
+        return orderDTOS;
+    }
+
     private OrderDTO getOrderDTOFromOrder(Order order) {
         OrderDTO orderDTO = new OrderDTO();
 
@@ -59,59 +242,34 @@ public class OrdersService {
         return orderDTO;
     }
 
-    Order createOrder(Long id, OrderType type){
-        Order order = new Order();
-        Company company = companyService.getCompanyById(id);
-        Company userBusiness = companyService.getBusinessOwner();
-        Long orderNr = ordersRepository.count() + 1;
-
-        order.setId(orderNr);
-        order.setOrderType(type);
-        order.setOrderDate(LocalDate.now());
-        if(type.equals(OrderType.PURCHASE)){
-            order.setClientName(userBusiness.getCompanyName());
-            order.setSupplierName(company.getCompanyName());
-        } else {
-            order.setClientName(company.getCompanyName());
-            order.setSupplierName(userBusiness.getCompanyName());
+    public OrderDTO getUpdatedOrderDTO(OrderDTO orderDTO, List<OrderLineDTO> orderLineDTOS) {
+        BigDecimal orderAmount = BigDecimal.ZERO;
+        for (OrderLineDTO lineDTO : orderLineDTOS) {
+            orderAmount = orderAmount.add(lineDTO.getLinePrice());
         }
-        order.setStatus(OrderStatus.OPEN);
-        order.setOrderAmount(BigDecimal.ZERO);
 
-        return order;
+        BigDecimal vatAmount = orderAmount.multiply(VAT).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal amountWithVAT = orderAmount.add(vatAmount);
+
+        orderDTO.setAmount(orderAmount);
+        orderDTO.setVatAmount(vatAmount);
+        orderDTO.setAmountWithVAT(amountWithVAT);
+
+        return orderDTO;
     }
 
-    public List<OrderLineDTO> updateOrderLine(List<OrderLineDTO> orderLineDTOS, Long itemNumber, Long quantity) {
+    private OrderLineDTO createOrderLineDTOForSupplierItem(SupplierItem item, Long orderNumber) {
+        OrderLineDTO orderLineDTO = new OrderLineDTO();
 
-        for(OrderLineDTO orderLineDTO : orderLineDTOS){
-            if(orderLineDTO.getItemNumber().equals(itemNumber)){
-                if(quantity == null || quantity <= 0){
-                    quantity = 0L;
-                }
-                orderLineDTO.setOrderQuantity(quantity);
-                orderLineDTO.setLinePrice(BigDecimal.valueOf(quantity).multiply(orderLineDTO.getPurchasePrice()));
-            }
-        }
+        orderLineDTO.setItemNumber(item.getItemNumber());
+        orderLineDTO.setItemName(item.getItemName());
+        orderLineDTO.setStockQuantity(item.getQuantity());
+        orderLineDTO.setOrderQuantity(0L);
+        orderLineDTO.setPurchasePrice(item.getPrice());
+        orderLineDTO.setLinePrice(BigDecimal.ZERO);
+        orderLineDTO.setOrderID(orderNumber);
 
-        return orderLineDTOS;
-    }
-
-    public List<OrderLineDTO> getOrderLines(OrderDTO order) {
-        List<OrderLine> orderLines = orderLineService.getOrderLinesByOrder(order.getOrderNumber());
-        List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
-
-        if(orderLines.size() == 0){
-            return null;
-        }
-
-        for(OrderLine orderLine : orderLines){
-            if(orderLine.getQuantity() != null && orderLine.getQuantity() > 0){
-                OrderLineDTO orderLineDTO = getOrderLineDTOFromOrderLine(orderLine);
-                orderLineDTOS.add(orderLineDTO);
-            }
-        }
-
-        return orderLineDTOS;
+        return orderLineDTO;
     }
 
     private OrderLineDTO getOrderLineDTOFromOrderLine(OrderLine orderLine) {
@@ -135,157 +293,5 @@ public class OrdersService {
         return orderLine;
     }
 
-    public OrderDTO getUpdatedOrderDTO(OrderDTO orderDTO, List<OrderLineDTO> orderLineDTOS){
-        BigDecimal orderAmount = BigDecimal.ZERO;
-        for(OrderLineDTO lineDTO : orderLineDTOS){
-            orderAmount = orderAmount.add(lineDTO.getLinePrice());
-        }
 
-        BigDecimal vatAmount = orderAmount.multiply(VAT).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal amountWithVAT = orderAmount.add(vatAmount);
-
-        orderDTO.setAmount(orderAmount);
-        orderDTO.setVatAmount(vatAmount);
-        orderDTO.setAmountWithVAT(amountWithVAT);
-
-        return orderDTO;
-    }
-
-    public InvoiceDTO getInvoiceDTO(OrderDTO orderDTO) {
-        InvoiceDTO invoiceDTO = new InvoiceDTO();
-        CompanyDTO companyDTO = companyService.getClientDTOByName(orderDTO.getClient());
-        CompanyDTO supplierDTO = companyService.getClientDTOByName(orderDTO.getSupplier());
-
-        List<OrderLine> orderLines = orderLineService.getOrderLinesByOrder(orderDTO.getOrderNumber());
-        List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
-        if(!(orderLines == null)){
-            for(OrderLine line : orderLines){
-                orderLineDTOS.add(getOrderLineDTOFromOrderLine(line));
-            }
-        }
-
-        invoiceDTO.setCustomer(companyDTO);
-        invoiceDTO.setSupplier(supplierDTO);
-        invoiceDTO.setOrder(orderDTO);
-        invoiceDTO.setOrderLines(orderLineDTOS);
-
-        return invoiceDTO;
-    }
-
-    public Page<OrderDTO> getOrdersByStatus(Pageable pageable, OrderStatus status) {
-        List<Order> orders = ordersRepository.findByStatus(status);
-        List<OrderDTO> orderDTOS = getOrderDTOS(orders);
-
-        return new PageImpl<>(orderDTOS, pageable, orderDTOS.size());
-    }
-
-    private List<OrderDTO> getOrderDTOS(List<Order> orders) {
-        List<OrderDTO> orderDTOS = new ArrayList<>();
-
-        if(orders != null){
-            for (Order order : orders){
-                orderDTOS.add(getOrderDTOFromOrder(order));
-            }
-        }
-
-        return orderDTOS;
-    }
-
-    public OrderDTO getOrderDTOByID(Long orderID){
-        return getOrderDTOFromOrder(getOrderByID(orderID));
-    }
-
-    public Order getOrderByID(Long orderID) {
-        return ordersRepository.findById(orderID).orElseThrow(IllegalArgumentException::new);
-    }
-
-    public Page<SupplierItemDto> getSupplierStock(Long supplierID, Pageable pageable) {
-        Page<SupplierItem> supplierStock = supplierItemsService.getSupplierStock(supplierID, pageable);
-        List<SupplierItemDto> itemDTOS = new ArrayList<>();
-
-        for(SupplierItem supplierItem : supplierStock){
-            SupplierItemDto supplierItemDto = new SupplierItemDto();
-            supplierItemDto.setItemID(supplierItem.getItemID());
-            supplierItemDto.setItemName(supplierItem.getItemName());
-            supplierItemDto.setItemDescription(supplierItem.getItemDescription());
-            supplierItemDto.setPrice(supplierItem.getPrice());
-            supplierItemDto.setQuantity(supplierItem.getQuantity());
-            itemDTOS.add(supplierItemDto);
-        }
-
-        return new PageImpl<>(itemDTOS, pageable, itemDTOS.size());
-    }
-
-    public List<OrderLineDTO> getSupplierOrderLines(Long supplierID, Long orderNumber) {
-        List<SupplierItem> supplierItems = supplierItemsService.getSupplierStock(supplierID, Pageable.unpaged()).stream().toList();
-        List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
-
-        for (SupplierItem item : supplierItems){
-            orderLineDTOS.add(createOrderLineDTOForSupplierItem(item, orderNumber));
-        }
-
-        return orderLineDTOS;
-    }
-
-    private OrderLineDTO createOrderLineDTOForSupplierItem(SupplierItem item, Long orderNumber) {
-        OrderLineDTO orderLineDTO = new OrderLineDTO();
-
-        orderLineDTO.setItemNumber(item.getItemNumber());
-        orderLineDTO.setItemName(item.getItemName());
-        orderLineDTO.setStockQuantity(item.getQuantity());
-        orderLineDTO.setOrderQuantity(0L);
-        orderLineDTO.setPurchasePrice(item.getPrice());
-        orderLineDTO.setLinePrice(BigDecimal.ZERO);
-        orderLineDTO.setOrderID(orderNumber);
-
-        return orderLineDTO;
-    }
-
-    @Transactional
-    public void saveNewOrder(OrderDTO orderDTO, List<OrderLineDTO> orderLineDTOS) {
-        Order order = createOrder(orderDTO);
-
-        ordersRepository.save(order);
-
-        long lineNr = 1L;
-
-        for (OrderLineDTO lineDTO : orderLineDTOS){
-            if(lineDTO.getOrderQuantity() != null && lineDTO.getOrderQuantity() > 0){
-                OrderLine orderLine = getOrderLineFromDTO(lineDTO);
-                orderLine.setLineNumber(lineNr++);
-                order.addOrderLine(orderLine);
-                orderLineService.saveOrderLine(orderLine);
-            }
-        }
-
-        String supplierName = order.getSupplierName();
-
-        supplierItemsService.updateSupplierStock(supplierName, orderLineDTOS);
-
-    }
-
-    private static Order createOrder(OrderDTO orderDTO) {
-        Order order = new Order();
-
-        order.setId(orderDTO.getOrderNumber());
-        order.setOrderType(orderDTO.getOrderType());
-        order.setOrderDate(orderDTO.getOrderDate());
-        order.setClientName(orderDTO.getClient());
-        order.setSupplierName(orderDTO.getSupplier());
-        order.setOrderAmount(orderDTO.getAmount());
-        order.setVatAmount(orderDTO.getVatAmount());
-        order.setAmountWithVAT(orderDTO.getAmountWithVAT());
-        order.setStatus(OrderStatus.INVOICED);
-        order.setOrderLines(new ArrayList<>());
-        return order;
-    }
-
-    public void updateOrderStatus(Long orderNumber, OrderStatus status) {
-        Order order = ordersRepository.findById(orderNumber).orElse(null);
-
-        if(order != null){
-            order.setStatus(status);
-            ordersRepository.save(order);
-        }
-    }
 }

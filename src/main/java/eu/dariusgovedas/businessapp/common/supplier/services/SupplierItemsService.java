@@ -75,10 +75,6 @@ public class SupplierItemsService {
 
     }
 
-    private Long generateItemNumber(ItemCategory category) {
-        return itemService.generateItemNumber(category);
-    }
-
     @Transactional
     public void updateSupplierStock(String supplierName, List<OrderLineDTO> orderLineDTOS) {
         SupplierWarehouse warehouse = warehouseService.getSupplierWarehouse(supplierName);
@@ -90,5 +86,9 @@ public class SupplierItemsService {
             item.setQuantity(quantity);
             supplierItemsRepository.save(item);
         }
+    }
+
+    private Long generateItemNumber(ItemCategory category) {
+        return itemService.generateItemNumber(category);
     }
 }

@@ -25,6 +25,7 @@ public class WarehouseService {
     private ItemService itemService;
     private StockItemService stockItemService;
     private OrderLineService orderLineService;
+
     public Page<ItemDTO> getWarehouseStock(Pageable pageable) {
         List<Item> items = itemService.getWarehouseItems();
 
@@ -33,6 +34,29 @@ public class WarehouseService {
         List<ItemDTO> itemDTOList = getItemDTOList(stockItems);
 
         return new PageImpl<>(itemDTOList, pageable, itemDTOList.size());
+    }
+
+    @Transactional
+    public void updateWarehouseStock(Long orderNr) {
+        List<OrderLine> orderLines = orderLineService.getOrderLinesByOrder(orderNr);
+
+        for (OrderLine orderLine : orderLines) {
+            Item item = itemService.getItemByItemName(orderLine.getItemName());
+            List<StockItem> stockItems = item.getStockItems();
+            if (stockItems.size() == 0) {
+                StockItem stockItem = stockItemService.createStockItem(orderLine);
+                stockItem.setItem(item);
+                stockItemService.saveStockItem(stockItem);
+                continue;
+            }
+            for (StockItem stockItem : stockItems) {
+                if (stockItem.getPurchasePrice().equals(orderLine.getPurchasePrice())) {
+                    long quantity = stockItem.getQuantity() + orderLine.getQuantity();
+                    stockItem.setQuantity(quantity);
+                    stockItemService.saveStockItem(stockItem);
+                }
+            }
+        }
     }
 
     private List<StockItem> getStockItems(List<Item> items) {
@@ -70,28 +94,5 @@ public class WarehouseService {
             itemDTOList.add(itemDTO);
         }
         return itemDTOList;
-    }
-
-    @Transactional
-    public void updateWarehouseStock(Long orderNr) {
-        List<OrderLine> orderLines = orderLineService.getOrderLinesByOrder(orderNr);
-
-        for(OrderLine orderLine : orderLines){
-            Item item = itemService.getItemByItemName(orderLine.getItemName());
-            List<StockItem> stockItems = item.getStockItems();
-            if(stockItems.size() == 0){
-                StockItem stockItem = stockItemService.createStockItem(orderLine);
-                stockItem.setItem(item);
-                stockItemService.saveStockItem(stockItem);
-                continue;
-            }
-            for (StockItem stockItem : stockItems){
-                if(stockItem.getPurchasePrice().equals(orderLine.getPurchasePrice())){
-                    long quantity = stockItem.getQuantity() + orderLine.getQuantity();
-                    stockItem.setQuantity(quantity);
-                    stockItemService.saveStockItem(stockItem);
-                }
-            }
-        }
     }
 }

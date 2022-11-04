@@ -69,7 +69,7 @@ public class CompanyController {
     @PostMapping("/private/companies/edit/{id}")
     public String updateClientData(@PathVariable Long id, CompanyDTO companyDTO){
 
-        companyService.updateClient(id, companyDTO);
+        companyService.updateCompany(id, companyDTO);
 
         return "redirect:/private/companies/showCompanies";
     }
