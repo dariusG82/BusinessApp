@@ -1,5 +1,6 @@
 package eu.dariusgovedas.businessapp.companies.service;
 
+import eu.dariusgovedas.businessapp.common.exceptions.CompanyNotFoundException;
 import eu.dariusgovedas.businessapp.common.supplier.entities.SupplierWarehouse;
 import eu.dariusgovedas.businessapp.common.supplier.services.SupplierWarehouseService;
 import eu.dariusgovedas.businessapp.companies.entities.Company;
@@ -84,12 +85,21 @@ public class CompanyService {
     public CompanyDTO getCompanyDTOById(Long id) {
         Company company = getCompanyById(id);
 
+        if(company == null){
+            throw new CompanyNotFoundException();
+        }
+
         return getCompanyDTOFromCompany(company);
     }
 
     @Transactional
     public void updateCompany(Long id, CompanyDTO companyDTO) {
         Company company = companyRepository.findByCompanyID(id);
+
+        if(company == null){
+            throw new CompanyNotFoundException();
+        }
+
         company.setCompanyName(companyDTO.getCompanyName());
         company.getRegistrationAddress().setCountry(companyDTO.getCountry());
         company.getRegistrationAddress().setCity(companyDTO.getCity());

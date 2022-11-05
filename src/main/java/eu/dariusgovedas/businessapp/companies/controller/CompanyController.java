@@ -1,5 +1,6 @@
 package eu.dariusgovedas.businessapp.companies.controller;
 
+import eu.dariusgovedas.businessapp.common.exceptions.CompanyNotFoundException;
 import eu.dariusgovedas.businessapp.companies.entities.dto.CompanyDTO;
 import eu.dariusgovedas.businessapp.companies.service.CompanyPropertiesService;
 import eu.dariusgovedas.businessapp.companies.service.CompanyService;
@@ -59,8 +60,15 @@ public class CompanyController {
 
     @GetMapping("/private/companies/edit/{id}")
     public String openClientEditForm(@PathVariable Long id, Model model){
+        CompanyDTO companyDTO;
 
-        model.addAttribute("company", companyService.getCompanyDTOById(id));
+        try {
+            companyDTO = companyService.getCompanyDTOById(id);
+        } catch (CompanyNotFoundException e){
+            return "error/404";
+        }
+
+        model.addAttribute("company", companyDTO);
         model.addAttribute("companyTypeOptions", companyPropertiesService.getCompanyTypes());
 
         return "companies/companyForm";
@@ -69,7 +77,11 @@ public class CompanyController {
     @PostMapping("/private/companies/edit/{id}")
     public String updateClientData(@PathVariable Long id, CompanyDTO companyDTO){
 
-        companyService.updateCompany(id, companyDTO);
+        try {
+            companyService.updateCompany(id, companyDTO);
+        } catch (CompanyNotFoundException e){
+            return "error/404";
+        }
 
         return "redirect:/private/companies/showCompanies";
     }

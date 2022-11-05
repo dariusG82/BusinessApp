@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout(#{error404.title}, ~{:: #main})">
+<div id="main">
+
+    <div class="container py-1">
+        <p>404 error</p>
+        <p th:text="#{error404.message}"></p>
+    </div>
+</div>
+</html>
