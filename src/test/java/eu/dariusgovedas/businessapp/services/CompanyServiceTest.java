@@ -1,13 +1,12 @@
 package eu.dariusgovedas.businessapp.services;
 
-import eu.dariusgovedas.businessapp.common.supplier.repositories.SupplierWarehouseRepository;
-import eu.dariusgovedas.businessapp.common.supplier.services.SupplierWarehouseService;
 import eu.dariusgovedas.businessapp.companies.entities.Company;
 import eu.dariusgovedas.businessapp.companies.entities.ContactDetails;
 import eu.dariusgovedas.businessapp.companies.entities.RegistrationAddress;
 import eu.dariusgovedas.businessapp.companies.entities.dto.CompanyDTO;
 import eu.dariusgovedas.businessapp.companies.enums.CompanyType;
 import eu.dariusgovedas.businessapp.companies.repository.CompanyRepository;
+import eu.dariusgovedas.businessapp.companies.service.CompanyPropertiesService;
 import eu.dariusgovedas.businessapp.companies.service.CompanyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,12 +32,8 @@ public class CompanyServiceTest {
     @Autowired
     private CompanyRepository companyRepository;
     @Autowired
-    private SupplierWarehouseService supplierWarehouseService;
-    @Autowired
-    private SupplierWarehouseRepository supplierWarehouseRepository;
+    private CompanyPropertiesService companyPropertiesService;
 
-    @Autowired
-    private CompanyDTO ownerCompanyDTO;
     @Autowired
     private CompanyDTO supplierCompanyDTO;
     @Autowired
@@ -49,8 +44,6 @@ public class CompanyServiceTest {
     private Company customerCompany;
     @Autowired
     private CompanyDTO companyDTO;
-    @Autowired
-    private Company company;
 
     @Autowired
     private JdbcTemplate jdbc;
@@ -325,9 +318,18 @@ public class CompanyServiceTest {
 
     @Test
     public void getSuppliers(){
+
         List<CompanyDTO> companyDTOList = companyService.getSuppliers(pageable).toList();
 
         assertEquals(1, companyDTOList.size());
         assertEquals(CompanyType.SUPPLIER, companyDTOList.get(0).getCompanyType());
+    }
+
+    @Test
+    public void getCompanyTypes_Test(){
+
+        assertEquals(2, companyPropertiesService.getCompanyTypes().size());
+        assertEquals(CompanyType.CUSTOMER, companyPropertiesService.getCompanyTypes().get(0));
+        assertEquals(CompanyType.SUPPLIER, companyPropertiesService.getCompanyTypes().get(1));
     }
 }
