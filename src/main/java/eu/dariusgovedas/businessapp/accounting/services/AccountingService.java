@@ -12,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -34,7 +32,7 @@ public class AccountingService {
 
         Order order = ordersService.getOrderByID(orderID);
 
-        Payment payment = createPayment(order);
+        Payment payment = paymentService.createPayment(order);
 
         boolean isPaymentSuccess = tryToPayForOrder(payment);
 
@@ -44,21 +42,8 @@ public class AccountingService {
         }
     }
 
-    private Payment createPayment(Order order){
-        Payment payment = new Payment();
-
-        payment.setID(UUID.randomUUID());
-        payment.setOrderNumber(order.getId());
-        payment.setCustomerName(order.getClientName());
-        payment.setSupplierName(order.getSupplierName());
-        payment.setDateOfOrder(order.getOrderDate());
-        payment.setDateOfPayment(LocalDate.now());
-        payment.setPaymentAmount(order.getAmountWithVAT());
-
-        return payment;
-    }
-
     private boolean tryToPayForOrder(Payment payment){
+
         List<BankAccount> accountList = accountService.getAllAccounts();
 
         for (BankAccount account : accountList) {

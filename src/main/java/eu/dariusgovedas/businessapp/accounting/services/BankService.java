@@ -1,8 +1,7 @@
 package eu.dariusgovedas.businessapp.accounting.services;
 
 import eu.dariusgovedas.businessapp.accounting.entities.Bank;
-import eu.dariusgovedas.businessapp.accounting.entities.BankAccount;
-import eu.dariusgovedas.businessapp.accounting.entities.dto.AccountDTO;
+import eu.dariusgovedas.businessapp.accounting.entities.dto.BankAccountDTO;
 import eu.dariusgovedas.businessapp.accounting.entities.dto.BankDTO;
 import eu.dariusgovedas.businessapp.accounting.repositories.BankRepository;
 import lombok.AllArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,18 +34,10 @@ public class BankService {
         bankRepository.save(bank);
     }
 
-    @Transactional
-    public void addAccount(AccountDTO accountDTO) {
-        Bank bank = bankRepository.findByNameIgnoreCase(accountDTO.getBankName());
+    public void addAccount(BankAccountDTO bankAccountDTO) {
+        Bank bank = bankRepository.findByNameIgnoreCase(bankAccountDTO.getBankName());
 
-        BankAccount account = new BankAccount();
-
-        account.setId(accountService.getNewAccountID());
-        account.setBank(bank);
-        account.setNumber(accountDTO.getAccountNumber());
-        account.setBalance(BigDecimal.ZERO);
-
-        accountService.saveNewAccount(account);
+        accountService.saveNewAccount(bank, bankAccountDTO);
     }
 
     public List<BankDTO> getAllBanks() {

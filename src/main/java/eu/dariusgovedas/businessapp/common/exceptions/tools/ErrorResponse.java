@@ -1,4 +1,4 @@
-package eu.dariusgovedas.businessapp.common.exceptions;
+package eu.dariusgovedas.businessapp.common.exceptions.tools;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package eu.dariusgovedas.businessapp.accounting.controllers;
 
-import eu.dariusgovedas.businessapp.accounting.entities.dto.AccountDTO;
+import eu.dariusgovedas.businessapp.accounting.entities.dto.BankAccountDTO;
 import eu.dariusgovedas.businessapp.accounting.entities.dto.BankDTO;
 import eu.dariusgovedas.businessapp.accounting.services.BankService;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class AccountingDataController {
     public String openAccountingDataEditor(Model model){
 
         model.addAttribute("bankData", new BankDTO());
-        model.addAttribute("accountData", new AccountDTO());
+        model.addAttribute("accountData", new BankAccountDTO());
         model.addAttribute("bankList", bankService.getAllBanks());
 
         return "admin/editAccountingData";
@@ -34,9 +34,9 @@ public class AccountingDataController {
     }
 
     @PostMapping("/private/addAccount")
-    public String saveNewAccount(AccountDTO accountDTO){
+    public String saveNewAccount(BankAccountDTO bankAccountDTO){
 
-        bankService.addAccount(accountDTO);
+        bankService.addAccount(bankAccountDTO);
 
         return "redirect:/private/editAccountingData";
     }
