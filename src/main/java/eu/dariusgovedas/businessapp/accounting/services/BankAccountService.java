@@ -25,7 +25,12 @@ public class BankAccountService {
     public void saveNewAccount(Bank bank, BankAccountDTO bankAccountDTO) {
 
         BankAccount account = new BankAccount();
-        account.setId(getNewAccountID());
+
+        if(bankAccountDTO.getAccountId() != null){
+            account.setId(bankAccountDTO.getAccountId());
+        } else {
+            account.setId(getNewAccountID());
+        }
         account.setBank(bank);
         account.setNumber(bankAccountDTO.getAccountNumber());
         account.setBalance(BigDecimal.ZERO);

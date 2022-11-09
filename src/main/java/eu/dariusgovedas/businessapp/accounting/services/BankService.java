@@ -4,9 +4,10 @@ import eu.dariusgovedas.businessapp.accounting.entities.Bank;
 import eu.dariusgovedas.businessapp.accounting.entities.dto.BankAccountDTO;
 import eu.dariusgovedas.businessapp.accounting.entities.dto.BankDTO;
 import eu.dariusgovedas.businessapp.accounting.repositories.BankRepository;
+import eu.dariusgovedas.businessapp.common.exceptions.BankAccountNotFoundException;
+import eu.dariusgovedas.businessapp.common.exceptions.BankNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Setter
 @Getter
 @AllArgsConstructor
 public class BankService {
@@ -26,6 +26,13 @@ public class BankService {
     public void addBank(BankDTO bankDTO) {
         Bank bank = new Bank();
 
+        if (bankDTO == null ||
+                bankDTO.getBankSwift() == null ||
+                bankDTO.getBankName() == null ||
+                bankDTO.getBankAddress() == null){
+            throw new BankNotFoundException();
+        }
+
         bank.setSwift(bankDTO.getBankSwift());
         bank.setName(bankDTO.getBankName());
         bank.setAddress(bankDTO.getBankAddress());
@@ -35,6 +42,12 @@ public class BankService {
     }
 
     public void addAccount(BankAccountDTO bankAccountDTO) {
+        if (bankAccountDTO == null ||
+                bankAccountDTO.getBankName() == null ||
+                bankAccountDTO.getAccountNumber() == null){
+            throw new BankAccountNotFoundException();
+        }
+
         Bank bank = bankRepository.findByNameIgnoreCase(bankAccountDTO.getBankName());
 
         accountService.saveNewAccount(bank, bankAccountDTO);
