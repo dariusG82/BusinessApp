@@ -14,6 +14,7 @@ import eu.dariusgovedas.businessapp.accounting.services.BankService;
 import eu.dariusgovedas.businessapp.accounting.services.PaymentService;
 import eu.dariusgovedas.businessapp.common.exceptions.BankAccountNotFoundException;
 import eu.dariusgovedas.businessapp.common.exceptions.BankNotFoundException;
+import eu.dariusgovedas.businessapp.sales.entities.Order;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,8 +25,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,6 +61,8 @@ public class AccountingServicesTest {
     @Autowired
     private BankAccountDTO bankAccountDTO;
     @Autowired
+    private Order order;
+    @Autowired
     private Payment payment;
 
     @Autowired
@@ -85,6 +90,19 @@ public class AccountingServicesTest {
         bankAccountDTO.setAccountNumber("LT122233336666558");
         bankAccountDTO.setBalance(BigDecimal.valueOf(20000));
         bankAccountDTO.setBankName(bank.getName());
+
+        order.setId(25L);
+        order.setOrderDate(LocalDate.of(2022,10,25));
+        order.setClientName("Verslo kasta");
+        order.setSupplierName("Kita klase");
+        order.setAmountWithVAT(BigDecimal.valueOf(2563.2f));
+
+        payment.setOrderNumber(order.getId());
+        payment.setCustomerName(order.getClientName());
+        payment.setSupplierName(order.getSupplierName());
+        payment.setDateOfOrder(order.getOrderDate());
+        payment.setDateOfPayment(LocalDate.now());
+        payment.setPaymentAmount(order.getAmountWithVAT());
     }
 
     @AfterEach
@@ -194,6 +212,20 @@ public class AccountingServicesTest {
     }
 
     // Payment Service Tests
+    @Test
+    public void createPayment_Test(){
+        assertEquals(payment, paymentService.createPayment(order));
+    }
+
+    @Test
+    public void savePayment_Test(){
+        assertEquals(1, paymentRepository.count());
+
+        payment.setID(UUID.randomUUID());
+        paymentService.savePayment(payment);
+
+        assertEquals(2, paymentRepository.count());
+    }
 
     // Accounting Service Tests
 }
