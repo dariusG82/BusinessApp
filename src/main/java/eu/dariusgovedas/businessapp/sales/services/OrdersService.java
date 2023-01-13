@@ -65,6 +65,11 @@ public class OrdersService {
         return order;
     }
 
+    public Page<OrderDTO> getAllOpenOrders(Pageable pageable) {
+
+        return getOrdersByStatus(pageable, OrderStatus.INVOICED);
+    }
+
     public List<OrderLineDTO> updateOrderLine(List<OrderLineDTO> orderLineDTOS, Long itemNumber, Long quantity) {
 
         for (OrderLineDTO orderLineDTO : orderLineDTOS) {
