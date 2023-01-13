@@ -73,15 +73,22 @@ public class Order {
         return total;
     }
 
-    public BigDecimal getVatAmount() {
-        BigDecimal amount = getOrderAmount();
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
+        this.vatAmount = calculateVatAmount();
+        this.amountWithVAT = calculateAmountWithVat();
+
+    }
+
+    private BigDecimal calculateVatAmount(){
+        BigDecimal amount = this.orderAmount;
         BigDecimal taxAmount = BigDecimal.valueOf(21);
         BigDecimal percentage = BigDecimal.valueOf(100);
 
         return amount.multiply(taxAmount).divide(percentage, RoundingMode.HALF_UP);
     }
 
-    public BigDecimal getAmountWithVAT() {
-        return getOrderAmount().add(getVatAmount());
+    private BigDecimal calculateAmountWithVat(){
+        return this.orderAmount.add(this.vatAmount);
     }
 }
