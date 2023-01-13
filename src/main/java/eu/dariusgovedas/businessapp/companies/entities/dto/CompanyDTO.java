@@ -3,9 +3,11 @@ package eu.dariusgovedas.businessapp.companies.entities.dto;
 import eu.dariusgovedas.businessapp.companies.enums.CompanyType;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 @Setter
 @Getter
+@Component
 public class CompanyDTO {
 
     private Long companyID;

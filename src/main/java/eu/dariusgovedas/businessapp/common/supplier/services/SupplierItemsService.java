@@ -52,9 +52,9 @@ public class SupplierItemsService {
     }
 
     @Transactional
-    public void addItem(Long id, ItemDTO itemDTO) {
+    public void addItem(Long companyID, ItemDTO itemDTO) {
         SupplierItem supplierItem = new SupplierItem();
-        Company company = companyService.getCompanyById(id);
+        Company company = companyService.getCompanyById(companyID);
         SupplierWarehouse supplierWarehouse = warehouseService.getSupplierWarehouse(company.getCompanyName());
         ItemCategory category = itemPropertiesService.getItemCategory(itemDTO.getCategory());
 
