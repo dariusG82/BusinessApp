@@ -7,14 +7,15 @@ import eu.dariusgovedas.businessapp.accounting.entities.dto.BankAccountDTO;
 import eu.dariusgovedas.businessapp.accounting.entities.dto.BankDTO;
 import eu.dariusgovedas.businessapp.accounting.repositories.BankAccountRepository;
 import eu.dariusgovedas.businessapp.accounting.repositories.BankRepository;
-import eu.dariusgovedas.businessapp.accounting.repositories.PaymentRepository;
-import eu.dariusgovedas.businessapp.accounting.services.AccountingService;
 import eu.dariusgovedas.businessapp.accounting.services.BankAccountService;
 import eu.dariusgovedas.businessapp.accounting.services.BankService;
 import eu.dariusgovedas.businessapp.accounting.services.PaymentService;
 import eu.dariusgovedas.businessapp.common.exceptions.BankAccountNotFoundException;
 import eu.dariusgovedas.businessapp.common.exceptions.BankNotFoundException;
 import eu.dariusgovedas.businessapp.sales.entities.Order;
+import eu.dariusgovedas.businessapp.sales.enums.OrderStatus;
+import eu.dariusgovedas.businessapp.sales.repositories.OrdersRepository;
+import eu.dariusgovedas.businessapp.sales.services.OrdersService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,10 +41,7 @@ public class AccountingServicesTest {
     @Autowired
     private BankAccountRepository bankAccountRepository;
     @Autowired
-    private PaymentRepository paymentRepository;
-
-    @Autowired
-    private AccountingService accountingService;
+    private OrdersService ordersService;
     @Autowired
     private BankService bankService;
     @Autowired
@@ -80,6 +77,10 @@ public class AccountingServicesTest {
     private String sqlDeleteBankAccount;
     @Value("${sql.script.delete.payment}")
     private String sqlDeletePayment;
+    @Value("${sql.script.delete.order}")
+    private String sqlDeleteOrders;
+    @Autowired
+    private OrdersRepository ordersRepository;
 
     @BeforeEach
     public void setupBeforeEach() {
@@ -95,7 +96,7 @@ public class AccountingServicesTest {
         order.setOrderDate(LocalDate.of(2022,10,25));
         order.setClientName("Verslo kasta");
         order.setSupplierName("Kita klase");
-        order.setAmountWithVAT(BigDecimal.valueOf(2563.2f));
+        order.setOrderAmount(BigDecimal.valueOf(35630.2f));
 
         payment.setOrderNumber(order.getId());
         payment.setCustomerName(order.getClientName());
@@ -110,6 +111,7 @@ public class AccountingServicesTest {
         jdbc.execute(sqlDeletePayment);
         jdbc.execute(sqlDeleteBankAccount);
         jdbc.execute(sqlDeleteBank);
+        jdbc.execute(sqlDeleteOrders);
     }
 
     // Bank Service Tests
@@ -211,21 +213,48 @@ public class AccountingServicesTest {
 
     }
 
+    @Test
+    public void saveNewAccount_Test(){
+        assertEquals(1, bankAccountRepository.count());
+
+        Bank testBank = bankRepository.findAll().get(0);
+
+        bankAccountDTO.setAccountId(null);
+        bankAccountDTO.setBankName("Swedbank");
+        bankAccountDTO.setAccountNumber("LT1114567890123456");
+
+        bankAccountService.saveNewAccount(testBank, bankAccountDTO);
+
+        assertEquals(2, bankAccountRepository.count());
+    }
+
     // Payment Service Tests
+
     @Test
-    public void createPayment_Test(){
-        assertEquals(payment, paymentService.createPayment(order));
+    public void makePayment_Test(){
+        order.setOrderAmount(BigDecimal.valueOf(200));
+        order.setStatus(OrderStatus.INVOICED);
+        ordersRepository.save(order);
+
+        assertEquals(OrderStatus.INVOICED, order.getStatus());
+
+        paymentService.makePayment(order.getId());
+
+        Order order1 = ordersService.getOrderByID(order.getId());
+        assertEquals(OrderStatus.CONFIRMED, order1.getStatus());
     }
 
     @Test
-    public void savePayment_Test(){
-        assertEquals(1, paymentRepository.count());
+    public void makePayment_FailedTest(){
+        order.setOrderAmount(BigDecimal.valueOf(200000));
+        order.setStatus(OrderStatus.INVOICED);
+        ordersRepository.save(order);
 
-        payment.setID(UUID.randomUUID());
-        paymentService.savePayment(payment);
+        assertEquals(OrderStatus.INVOICED, order.getStatus());
 
-        assertEquals(2, paymentRepository.count());
+        paymentService.makePayment(order.getId());
+
+        Order order1 = ordersService.getOrderByID(order.getId());
+        assertEquals(OrderStatus.INVOICED, order1.getStatus());
     }
-
-    // Accounting Service Tests
 }
