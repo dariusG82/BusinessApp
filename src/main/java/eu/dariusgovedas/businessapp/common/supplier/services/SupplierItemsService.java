@@ -58,7 +58,13 @@ public class SupplierItemsService {
         SupplierWarehouse supplierWarehouse = warehouseService.getSupplierWarehouse(company.getCompanyName());
         ItemCategory category = itemPropertiesService.getItemCategory(itemDTO.getCategory());
 
-        supplierItem.setItemID(UUID.randomUUID());
+        UUID itemID;
+        if(itemDTO.getItemID() == null){
+            itemID = UUID.randomUUID();
+        } else {
+            itemID = itemDTO.getItemID();
+        }
+        supplierItem.setItemID(itemID);
         itemDTO.setItemID(supplierItem.getItemID());
         supplierItem.setItemNumber(generateItemNumber(category));
         itemDTO.setItemNumber(supplierItem.getItemNumber());
