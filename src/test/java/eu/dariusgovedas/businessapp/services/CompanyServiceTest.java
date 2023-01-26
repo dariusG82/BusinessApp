@@ -35,15 +35,9 @@ public class CompanyServiceTest {
     private CompanyPropertiesService companyPropertiesService;
 
     @Autowired
-    private CompanyDTO supplierCompanyDTO;
-    @Autowired
-    private Company supplierCompany;
-    @Autowired
-    private CompanyDTO customerCompanyDTO;
-    @Autowired
-    private Company customerCompany;
-    @Autowired
     private CompanyDTO companyDTO;
+    @Autowired
+    private Company company;
 
     @Autowired
     private JdbcTemplate jdbc;
@@ -60,54 +54,55 @@ public class CompanyServiceTest {
 
     @BeforeEach
     public void setup() {
-        supplierCompanyDTO.setCompanyID(123456789L);
-        supplierCompanyDTO.setCompanyName("MB Kankorezis");
-        supplierCompanyDTO.setCompanyType(CompanyType.SUPPLIER);
-        supplierCompanyDTO.setCountry("Lithuania");
-        supplierCompanyDTO.setCity("Kaunas");
-        supplierCompanyDTO.setStreet("V. Kudirkos g.");
-        supplierCompanyDTO.setHouseNumber("35a");
-        supplierCompanyDTO.setFlatNumber("25");
-        supplierCompanyDTO.setPhoneNumber("+370 626 70080");
-        supplierCompanyDTO.setEmailAddress("kankorezis@mail.com");
+        companyDTO.setCompanyID(123456789L);
+        companyDTO.setCompanyName("MB Kankorezis");
+        companyDTO.setCompanyType(CompanyType.SUPPLIER);
+        companyDTO.setCountry("Lithuania");
+        companyDTO.setCity("Kaunas");
+        companyDTO.setStreet("V. Kudirkos g.");
+        companyDTO.setHouseNumber("35a");
+        companyDTO.setFlatNumber("25");
+        companyDTO.setPhoneNumber("+370 626 70080");
+        companyDTO.setEmailAddress("kankorezis@mail.com");
 
-        supplierCompany.setCompanyID(123456789L);
-        supplierCompany.setCompanyName("MB Kankorezis");
-        supplierCompany.setCompanyType(CompanyType.SUPPLIER);
-        supplierCompany.setRegistrationAddress(new RegistrationAddress());
-        supplierCompany.getRegistrationAddress().setCountry("Lithuania");
-        supplierCompany.getRegistrationAddress().setCity("Kaunas");
-        supplierCompany.getRegistrationAddress().setStreet("V. Kudirkos g.");
-        supplierCompany.getRegistrationAddress().setHouseNumber("35a");
-        supplierCompany.getRegistrationAddress().setFlatNumber("25");
-        supplierCompany.setContactDetails(new ContactDetails());
-        supplierCompany.getContactDetails().setPhoneNumber("+370 626 70080");
-        supplierCompany.getContactDetails().setEmailAddress("kankorezis@mail.com");
+        company.setCompanyID(123456789L);
+        company.setCompanyName("MB Kankorezis");
+        company.setCompanyType(CompanyType.SUPPLIER);
+        company.setRegistrationAddress(new RegistrationAddress());
+        company.getRegistrationAddress().setCountry("Lithuania");
+        company.getRegistrationAddress().setCity("Kaunas");
+        company.getRegistrationAddress().setStreet("V. Kudirkos g.");
+        company.getRegistrationAddress().setHouseNumber("35a");
+        company.getRegistrationAddress().setFlatNumber("25");
+        company.setContactDetails(new ContactDetails());
+        company.getContactDetails().setPhoneNumber("+370 626 70080");
+        company.getContactDetails().setEmailAddress("kankorezis@mail.com");
 
-        customerCompanyDTO.setCompanyID(987654321L);
-        customerCompanyDTO.setCompanyName("UAB 'Kita planeta'");
-        customerCompanyDTO.setCompanyType(CompanyType.CUSTOMER);
-        customerCompanyDTO.setCountry("Lithuania");
-        customerCompanyDTO.setCity("Vilnius");
-        customerCompanyDTO.setStreet("A. Brazausko al.");
-        customerCompanyDTO.setHouseNumber("22");
-        customerCompanyDTO.setPhoneNumber("+370 677 89955");
-        customerCompanyDTO.setEmailAddress("planeta@mail.com");
+        companyRepository.save(company);
 
-        customerCompany.setCompanyID(987654321L);
-        customerCompany.setCompanyName("UAB 'Kita planeta'");
-        customerCompany.setCompanyType(CompanyType.CUSTOMER);
-        customerCompany.setRegistrationAddress(new RegistrationAddress());
-        customerCompany.getRegistrationAddress().setCountry("Lithuania");
-        customerCompany.getRegistrationAddress().setCity("Vilnius");
-        customerCompany.getRegistrationAddress().setStreet("A. Brazausko al.");
-        customerCompany.getRegistrationAddress().setHouseNumber("22");
-        customerCompany.setContactDetails(new ContactDetails());
-        customerCompany.getContactDetails().setPhoneNumber("+370 677 89955");
-        customerCompany.getContactDetails().setEmailAddress("planeta@mail.com");
+        companyDTO.setCompanyID(987654321L);
+        companyDTO.setCompanyName("UAB 'Kita planeta'");
+        companyDTO.setCompanyType(CompanyType.CUSTOMER);
+        companyDTO.setCountry("Lithuania");
+        companyDTO.setCity("Vilnius");
+        companyDTO.setStreet("A. Brazausko al.");
+        companyDTO.setHouseNumber("22");
+        companyDTO.setPhoneNumber("+370 677 89955");
+        companyDTO.setEmailAddress("planeta@mail.com");
 
-        companyRepository.save(supplierCompany);
-        companyRepository.save(customerCompany);
+        company.setCompanyID(987654321L);
+        company.setCompanyName("UAB 'Kita planeta'");
+        company.setCompanyType(CompanyType.CUSTOMER);
+        company.setRegistrationAddress(new RegistrationAddress());
+        company.getRegistrationAddress().setCountry("Lithuania");
+        company.getRegistrationAddress().setCity("Vilnius");
+        company.getRegistrationAddress().setStreet("A. Brazausko al.");
+        company.getRegistrationAddress().setHouseNumber("22");
+        company.setContactDetails(new ContactDetails());
+        company.getContactDetails().setPhoneNumber("+370 677 89955");
+        company.getContactDetails().setEmailAddress("planeta@mail.com");
+
+        companyRepository.save(company);
     }
 
     @AfterEach
@@ -117,7 +112,6 @@ public class CompanyServiceTest {
 
     @Test
     public void saveCompanyTest() {
-
         CompanyDTO newCompanyDTO = new CompanyDTO();
         newCompanyDTO.setCompanyID(123123123L);
         newCompanyDTO.setCompanyName("AB 'Saules takas'");
@@ -130,8 +124,9 @@ public class CompanyServiceTest {
         newCompanyDTO.setEmailAddress("takas@mail.com");
 
         companyService.saveCompanyData(newCompanyDTO);
+        List<Company> companies = companyRepository.findAll();
 
-        assertEquals(3, companyRepository.findAll().size());
+        assertEquals(3, companies.size());
     }
 
     @Test
@@ -164,7 +159,7 @@ public class CompanyServiceTest {
 
     @Test
     public void searchForCompany_CompanyIdNameCountryCityProvided(){
-
+        companyDTO = new CompanyDTO();
         companyDTO.setCompanyID(123456789L);
         companyDTO.setCompanyName("MB Kankorezis");
         companyDTO.setCountry("Lithuania");
@@ -176,7 +171,7 @@ public class CompanyServiceTest {
 
     @Test
     public void searchForCompany_CompanyNameCountryCityProvided(){
-
+        companyDTO = new CompanyDTO();
         companyDTO.setCompanyName("MB Kankorezis");
         companyDTO.setCountry("Lithuania");
         companyDTO.setCity("Kaunas");
@@ -187,7 +182,7 @@ public class CompanyServiceTest {
 
     @Test
     public void searchForCompany_CompanyCountryCityProvided(){
-
+        companyDTO = new CompanyDTO();
         companyDTO.setCountry("Lithuania");
         companyDTO.setCity("Kaunas");
 
@@ -197,7 +192,7 @@ public class CompanyServiceTest {
 
     @Test
     public void searchForCompany_CompanyIdProvided(){
-
+        companyDTO = new CompanyDTO();
         companyDTO.setCompanyID(123456789L);
 
         assertEquals(1, companyService.searchForCompany(pageable, companyDTO).getNumberOfElements());
@@ -206,7 +201,7 @@ public class CompanyServiceTest {
 
     @Test
     public void searchForCompany_CompanyNameProvided(){
-
+        companyDTO = new CompanyDTO();
         companyDTO.setCompanyName("MB Kankorezis");
 
         assertEquals(1, companyService.searchForCompany(pageable, companyDTO).getNumberOfElements());
@@ -215,7 +210,7 @@ public class CompanyServiceTest {
 
     @Test
     public void searchForCompany_CompanyCountryProvided(){
-
+        companyDTO = new CompanyDTO();
         companyDTO.setCountry("Lithuania");
 
         List<CompanyDTO> companyDTOS = companyService.searchForCompany(pageable, companyDTO).stream().toList();
@@ -227,7 +222,7 @@ public class CompanyServiceTest {
 
     @Test
     public void searchForCompany_CompanyCityProvided(){
-
+        companyDTO = new CompanyDTO();
         companyDTO.setCity("Kaunas");
 
         assertEquals(1, companyService.searchForCompany(pageable, companyDTO).getNumberOfElements());
@@ -243,6 +238,7 @@ public class CompanyServiceTest {
 
     @Test
     public void searchForCompany_EmptyParametersProvided(){
+        companyDTO = new CompanyDTO();
         companyDTO.setCompanyName("");
         companyDTO.setCountry("");
         companyDTO.setCity("");
